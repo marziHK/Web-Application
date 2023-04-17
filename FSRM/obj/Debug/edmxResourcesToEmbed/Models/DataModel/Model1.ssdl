@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="db_FSRMModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Tbl_Access">
+    <Key>
+      <PropertyRef Name="fld_AccessID" />
+    </Key>
+    <Property Name="fld_AccessID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_FK_PersonID" Type="int" />
+    <Property Name="fld_FK_FolderID" Type="int" />
+    <Property Name="fld_AccessRead" Type="bit" />
+    <Property Name="fld_AccessWrite" Type="bit" />
+    <Property Name="fld_AccessModify" Type="bit" />
+    <Property Name="fld_LastPersonModified" Type="nvarchar" MaxLength="100" />
+    <Property Name="fld_AdminChecked" Type="bit" />
+    <Property Name="fld_AccessShow" Type="bit" />
+  </EntityType>
+  <EntityType Name="Tbl_AccessEmailsLog">
+    <Key>
+      <PropertyRef Name="fld_EmailID" />
+    </Key>
+    <Property Name="fld_EmailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_EmailsStatus" Type="int" Nullable="false" />
+    <Property Name="fld_FK_AccessID" Type="int" Nullable="false" />
+    <Property Name="fld_EmailAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="fld_EmailBody" Type="nvarchar(max)" />
+    <Property Name="fld_EmailSentHDate" Type="nvarchar" MaxLength="8" />
+    <Property Name="fld_EmailSentTime" Type="nvarchar" MaxLength="8" />
+    <Property Name="fld_EmailSentMDateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tbl_AccessLog">
+    <Key>
+      <PropertyRef Name="fld_AccessLogID" />
+    </Key>
+    <Property Name="fld_AccessLogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_FK_AccessID" Type="int" />
+    <Property Name="fld_FK_AccessStatus" Type="int" />
+    <Property Name="fld_AccessLogPersonName" Type="nvarchar" MaxLength="200" />
+    <Property Name="fld_AccessLogPreviousAccessID" Type="int" />
+    <Property Name="fld_ShowLastLog" Type="bit" />
+    <Property Name="fld_AccessLogHDate" Type="int" />
+    <Property Name="fld_AccessLogTime" Type="nvarchar" MaxLength="8" />
+    <Property Name="fld_AccessLogMDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Tbl_AccessStatus">
+    <Key>
+      <PropertyRef Name="fld_AccessStatusID" />
+    </Key>
+    <Property Name="fld_AccessStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_AccessStatusCode" Type="int" Nullable="false" />
+    <Property Name="fld_AccessStatusDesc" Type="nvarchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tbl_Admins">
+    <Key>
+      <PropertyRef Name="fld_AdminID" />
+    </Key>
+    <Property Name="fld_AdminID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_AdminName" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="fld_AdminADName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="fld_AdminShow" Type="bit" />
+    <Property Name="fld_AdminStatus" Type="int" />
+    <Property Name="fld_AdminMDateA" Type="datetime" />
+    <Property Name="fld_AdminMDateR" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Tbl_Department">
+    <Key>
+      <PropertyRef Name="fld_DepartmentID" />
+    </Key>
+    <Property Name="fld_DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_DepartmentName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fld_DepartmentADName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fld_state" Type="int" />
+  </EntityType>
+  <EntityType Name="Tbl_Folders">
+    <Key>
+      <PropertyRef Name="fld_FolderID" />
+    </Key>
+    <Property Name="fld_FolderID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_FK_FolderOwner" Type="int" Nullable="false" />
+    <Property Name="fld_FolderAddress" Type="nvarchar(max)" />
+    <Property Name="fld_SuggestedAddress" Type="nvarchar(max)" />
+    <Property Name="fld_SuggestedName" Type="nvarchar" MaxLength="200" />
+    <Property Name="fld_SuggestedSpace" Type="int" />
+    <Property Name="fld_ApprovedSpace" Type="int" />
+    <Property Name="fld_FolderShow" Type="bit" />
+    <Property Name="fld_AdminCheck" Type="bit" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersEmailsLog">
+    <Key>
+      <PropertyRef Name="fld_EmailID" />
+    </Key>
+    <Property Name="fld_EmailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_EmailsStatus" Type="int" Nullable="false" />
+    <Property Name="fld_FK_FoldersID" Type="int" Nullable="false" />
+    <Property Name="fld_EmailAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="fld_EmailBody" Type="nvarchar(max)" />
+    <Property Name="fld_EmailSentHDate" Type="nvarchar" MaxLength="8" />
+    <Property Name="fld_EmailSentMDateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersOwner">
+    <Key>
+      <PropertyRef Name="fld_FolderOwnerID" />
+    </Key>
+    <Property Name="fld_FolderOwnerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_FK_FolderOwnerOU" Type="int" />
+    <Property Name="fld_FolderOwnerName" Type="nvarchar" MaxLength="150" />
+    <Property Name="fld_FolderOwnerEmail" Type="nvarchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersRequestLog">
+    <Key>
+      <PropertyRef Name="fld_FoldersRequstLogID" />
+    </Key>
+    <Property Name="fld_FoldersRequstLogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_FK_FoldersID" Type="int" />
+    <Property Name="fld_FK_FoldersRequestStatusID" Type="int" />
+    <Property Name="fld_FolderRequestLog_PersonModified" Type="nvarchar" MaxLength="200" />
+    <Property Name="fld_FolderRequestLogPreviousFolderID" Type="int" />
+    <Property Name="fld_FolderRequestLogHDate" Type="int" />
+    <Property Name="fld_FolderRequestLogMDate" Type="datetime" />
+    <Property Name="fld_ShowLastLog" Type="bit" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersRequstStatus">
+    <Key>
+      <PropertyRef Name="fld_FoldersRequestStatusID" />
+    </Key>
+    <Property Name="fld_FoldersRequestStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_FoldersRequestStatusCode" Type="int" />
+    <Property Name="fld_FoldersRequestStatusDescription" Type="nvarchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="Tbl_Personnel">
+    <Key>
+      <PropertyRef Name="fld_PersonID" />
+    </Key>
+    <Property Name="fld_PersonID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="fld_PersonFName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fld_PersonLName" Type="nvarchar" MaxLength="50" />
+    <Property Name="fld_PersonNO" Type="nvarchar" MaxLength="8" />
+    <Property Name="fld_FK_DepartmentID" Type="int" />
+  </EntityType>
+  <Association Name="FK_Tbl_Access_Tbl_Folders">
+    <End Role="Tbl_Folders" Type="Self.Tbl_Folders" Multiplicity="0..1" />
+    <End Role="Tbl_Access" Type="Self.Tbl_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Folders">
+        <PropertyRef Name="fld_FolderID" />
+      </Principal>
+      <Dependent Role="Tbl_Access">
+        <PropertyRef Name="fld_FK_FolderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Access_Tbl_Personnel">
+    <End Role="Tbl_Personnel" Type="Self.Tbl_Personnel" Multiplicity="0..1" />
+    <End Role="Tbl_Access" Type="Self.Tbl_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Personnel">
+        <PropertyRef Name="fld_PersonID" />
+      </Principal>
+      <Dependent Role="Tbl_Access">
+        <PropertyRef Name="fld_FK_PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_AccessLog_Tbl_Access">
+    <End Role="Tbl_Access" Type="Self.Tbl_Access" Multiplicity="0..1" />
+    <End Role="Tbl_AccessLog" Type="Self.Tbl_AccessLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Access">
+        <PropertyRef Name="fld_AccessID" />
+      </Principal>
+      <Dependent Role="Tbl_AccessLog">
+        <PropertyRef Name="fld_FK_AccessID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_AccessLog_Tbl_AccessStatus">
+    <End Role="Tbl_AccessStatus" Type="Self.Tbl_AccessStatus" Multiplicity="0..1" />
+    <End Role="Tbl_AccessLog" Type="Self.Tbl_AccessLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_AccessStatus">
+        <PropertyRef Name="fld_AccessStatusID" />
+      </Principal>
+      <Dependent Role="Tbl_AccessLog">
+        <PropertyRef Name="fld_FK_AccessStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_FolderRequestLog_Tbl_Folders">
+    <End Role="Tbl_Folders" Type="Self.Tbl_Folders" Multiplicity="0..1" />
+    <End Role="Tbl_FoldersRequestLog" Type="Self.Tbl_FoldersRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Folders">
+        <PropertyRef Name="fld_FolderID" />
+      </Principal>
+      <Dependent Role="Tbl_FoldersRequestLog">
+        <PropertyRef Name="fld_FK_FoldersID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus">
+    <End Role="Tbl_FoldersRequstStatus" Type="Self.Tbl_FoldersRequstStatus" Multiplicity="0..1" />
+    <End Role="Tbl_FoldersRequestLog" Type="Self.Tbl_FoldersRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_FoldersRequstStatus">
+        <PropertyRef Name="fld_FoldersRequestStatusID" />
+      </Principal>
+      <Dependent Role="Tbl_FoldersRequestLog">
+        <PropertyRef Name="fld_FK_FoldersRequestStatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Folders_Tbl_FoldersOwner">
+    <End Role="Tbl_FoldersOwner" Type="Self.Tbl_FoldersOwner" Multiplicity="1" />
+    <End Role="Tbl_Folders" Type="Self.Tbl_Folders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_FoldersOwner">
+        <PropertyRef Name="fld_FolderOwnerID" />
+      </Principal>
+      <Dependent Role="Tbl_Folders">
+        <PropertyRef Name="fld_FK_FolderOwner" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Personnel_Tbl_Department">
+    <End Role="Tbl_Department" Type="Self.Tbl_Department" Multiplicity="0..1" />
+    <End Role="Tbl_Personnel" Type="Self.Tbl_Personnel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Department">
+        <PropertyRef Name="fld_DepartmentID" />
+      </Principal>
+      <Dependent Role="Tbl_Personnel">
+        <PropertyRef Name="fld_FK_DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="db_FSRMModelStoreContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_Access" EntityType="Self.Tbl_Access" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_AccessEmailsLog" EntityType="Self.Tbl_AccessEmailsLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_AccessLog" EntityType="Self.Tbl_AccessLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_AccessStatus" EntityType="Self.Tbl_AccessStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_Admins" EntityType="Self.Tbl_Admins" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_Department" EntityType="Self.Tbl_Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_Folders" EntityType="Self.Tbl_Folders" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_FoldersEmailsLog" EntityType="Self.Tbl_FoldersEmailsLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_FoldersOwner" EntityType="Self.Tbl_FoldersOwner" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_FoldersRequestLog" EntityType="Self.Tbl_FoldersRequestLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_FoldersRequstStatus" EntityType="Self.Tbl_FoldersRequstStatus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_Personnel" EntityType="Self.Tbl_Personnel" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Tbl_Access_Tbl_Folders" Association="Self.FK_Tbl_Access_Tbl_Folders">
+      <End Role="Tbl_Folders" EntitySet="Tbl_Folders" />
+      <End Role="Tbl_Access" EntitySet="Tbl_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Access_Tbl_Personnel" Association="Self.FK_Tbl_Access_Tbl_Personnel">
+      <End Role="Tbl_Personnel" EntitySet="Tbl_Personnel" />
+      <End Role="Tbl_Access" EntitySet="Tbl_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_AccessLog_Tbl_Access" Association="Self.FK_Tbl_AccessLog_Tbl_Access">
+      <End Role="Tbl_Access" EntitySet="Tbl_Access" />
+      <End Role="Tbl_AccessLog" EntitySet="Tbl_AccessLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_AccessLog_Tbl_AccessStatus" Association="Self.FK_Tbl_AccessLog_Tbl_AccessStatus">
+      <End Role="Tbl_AccessStatus" EntitySet="Tbl_AccessStatus" />
+      <End Role="Tbl_AccessLog" EntitySet="Tbl_AccessLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_FolderRequestLog_Tbl_Folders" Association="Self.FK_Tbl_FolderRequestLog_Tbl_Folders">
+      <End Role="Tbl_Folders" EntitySet="Tbl_Folders" />
+      <End Role="Tbl_FoldersRequestLog" EntitySet="Tbl_FoldersRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus" Association="Self.FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus">
+      <End Role="Tbl_FoldersRequstStatus" EntitySet="Tbl_FoldersRequstStatus" />
+      <End Role="Tbl_FoldersRequestLog" EntitySet="Tbl_FoldersRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Folders_Tbl_FoldersOwner" Association="Self.FK_Tbl_Folders_Tbl_FoldersOwner">
+      <End Role="Tbl_FoldersOwner" EntitySet="Tbl_FoldersOwner" />
+      <End Role="Tbl_Folders" EntitySet="Tbl_Folders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Personnel_Tbl_Department" Association="Self.FK_Tbl_Personnel_Tbl_Department">
+      <End Role="Tbl_Department" EntitySet="Tbl_Department" />
+      <End Role="Tbl_Personnel" EntitySet="Tbl_Personnel" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

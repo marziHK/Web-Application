@@ -1,0 +1,360 @@
+﻿
+@{
+    ViewBag.Title = "داشبورد مدیریتی";
+    Layout = "~/Views/Shared/_LyAdmin.cshtml";
+}
+
+
+<br />
+<br />
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+
+        <h5 class="mb-2">درخواست های تغییرات / ایجاد دسترسی ها</h5>
+        <div class="row">
+            <div class="col-md-3 col-sm-6 col-12">
+
+                <div class="small-box bg-info-gradient">
+                    <div class="inner">
+                        <h3>@ViewBag.CntAllAccess</h3>
+
+                        <p>تعداد کل درخواست ها</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-inbox"></i>
+                    </div>
+                    <a href="/Admin/Permits" class="small-box-footer">مشاهده بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                </div>
+
+                <!-- /.info-box-content -->
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="small-box bg-danger-gradient">
+                    <div class="inner">
+                        <h3>@ViewBag.CntOpenAccess</h3>
+
+                        <p>تعداد درخواست های باز</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-unlock"></i>
+                    </div>
+                    <a href="/Admin/Permits" class="small-box-footer">مشاهده بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                </div>
+
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-md-3 col-sm-6 col-12">
+
+
+
+
+                <div class="small-box bg-warning-gradient">
+                    <div class="inner">
+                        <h3>@ViewBag.CntTodayAccess</h3>
+
+                        <p>تعداد درخواست های امروز</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-edit"></i>
+                    </div>
+                    <a href="/Admin/Permits" class="small-box-footer">مشاهده بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                </div>
+
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <!-- =========================================================== -->
+        <!-- Charts -->
+
+        <div class="row">
+            <div class="col-md-5">
+                <!-- Bar CHART -->
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">تعداد کل دسترسی های به تفکیک نوع دسترسی </h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @(Html.Kendo().Chart<FSRM.Models.ViewModels.PermitsTypeChartViewModel>()
+                            .Name("AllPermitsByType")
+                            .Legend(legend => legend.Visible(false))
+                            .Tooltip(tooltip => tooltip.Template("#= series.name #: #= value #").Visible(true))
+                            .DataSource(ds=>ds.Read(read=>read.Action("AllPermitsByType", "Charts")))
+                            .Series(series => {series.Column(
+                                                        model => model.Value,
+                                                        //model => model.Name
+                                                        model => model.Color
+                                                        //null, // Color expression is omitted
+                                                        //model => model.Explode
+                                                        );
+                                                })
+                            .CategoryAxis(axis => axis
+                                                    .Categories(model=>model.Name)
+                                                    .MajorGridLines(lines => lines.Visible(false))
+                                                    .Line(line => line.Visible(false))
+                                                    )
+                            .ValueAxis(axis => axis
+                                                .Numeric()
+                                                .MajorUnit(1)
+                                                .Labels(labels => labels.Format("{0:n0}"))
+                                                .Line(line => line.Visible(false))
+                                                .MajorGridLines(lines => lines.Visible(true))
+                                        )
+                            )
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+            <div class="col-md-7">
+                <!-- BAR CHART -->
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">نمودار تعداد کل دسترسی های به تفکیک معاونت ها</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+
+                            @(Html.Kendo().Chart<FSRM.Models.ViewModels.PermitsChartViewModel>
+    ()
+    .Name("AllPermitsByOU")
+    .Legend(legend => legend.Position(ChartLegendPosition.Bottom))
+    .Tooltip(tooltip => tooltip.Template("${ category } - ${ value }%").Visible(true))
+    .DataSource(ds=>ds.Read(read=>read.Action("AllPermitsByOU", "Charts")))
+    //.SeriesColors(new string[] { "#028090",   "#43919B", "#0093AB", "#00AFC1","#BE8C63", "#d9ae94", "#b8b8aa", "#d5bdaf", "#f3d5b5" })
+    .SeriesColors(new string[] { "#005f73", "#0a9396", "#24A19C", "#39A388",  "#94d2bd", "#e9d8a6",  "#fac05e",  "#faa307", "#f8961e", "#e85d04", "#dc2f02", "#d00000",    })
+    .Series(series => {
+        series.Pie(model =>
+        model.OuAllAccess,
+        model => model.OuName
+        //null, // Color expression is omitted
+        //model => model.Explode
+        );
+    })
+    )
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <!-- BAR CHART -->
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">نمودار تعداد درخواست های ایجاد پوشه به تفکیک معاونت</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            @(Html.Kendo().Chart<FSRM.Models.ViewModels.PermitsChartViewModel>()
+                                            .Name("OUPermitsDetails")
+                                            .Legend(legend => legend.Position(ChartLegendPosition.Top))
+                                            .Tooltip(tooltip => tooltip.Template("#= series.name #: #= value #").Visible(true))
+                                            .DataSource(ds => ds.Read(read => read.Action("OUPermitsDetails", "Charts")))
+                                            .Series(series =>
+                                            {
+                                                series.Column(model => model.ReadAccess).Name("Read").Color("#2B580C");//.Color("#8ecae6");
+                                                series.Column(model => model.WriteAccess).Name("Write").Color("#AFA939");//.Color("#219ebc");
+                                                series.Column(model => model.ModifyAccess).Name("Modify").Color("#F7B71D");//.Color("#126782");
+                                            })
+                                            .CategoryAxis(axis => axis
+                                                .Categories(model => model.OuName)
+                                                .MajorGridLines(lines => lines.Visible(false))
+                                                .Line(line => line.Visible(false))
+                                            )
+                                            .ValueAxis(axis => axis
+                                                .Numeric()
+                                                .MajorUnit(1)
+                                                    .Labels(labels => labels.Format("{0:n0}"))
+                                                    .Line(line => line.Visible(false))
+                                                    .MajorGridLines(lines => lines.Visible(true))
+                                            )
+                            )
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+
+        <!-- =========================================================== -->
+        <br />
+        <br />
+
+        <h5 class="mt-4 mb-2">درخواست های ایجاد پوشه</h5>
+        <div class="row">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info-gradient">
+                    <div class="inner">
+                        <h3>@ViewBag.CntAllFolderReq</h3>
+
+                        <p>کل درخواست ها</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-tasks"></i>
+                    </div>
+                    <a href="/Admin/Folders" class="small-box-footer">مشاهده بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger-gradient">
+                    <div class="inner">
+                        <h3>@ViewBag.CntOpenFolderReq</h3>
+
+                        <p>درخواست های بررسی نشده</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-envelope-open"></i>
+                    </div>
+                    <a href="/Admin/Folders" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info bg-warning-gradient">
+                    <div class="inner">
+                        <h3>@ViewBag.CntTodayFolderReq</h3>
+
+                        <p>درخواست های امروز</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-tag"></i>
+                    </div>
+                    <a href="/Admin/Folders" class="small-box-footer">اطلاعات بیشتر <i class="fa fa-arrow-circle-left"></i></a>
+                </div>
+            </div>
+            <!-- ./col -->
+        </div>
+        <!-- /.row -->
+        <!-- =========================================================== -->
+        <br />
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-md-5">
+                <!-- Pie CHART -->
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">نمودار درصد تعداد پوشه های هر معاونت</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+
+                        @(Html.Kendo().Chart<FSRM.Models.ViewModels.FoldersOUViewModel>()
+                            .Name("AllFoldersByOU")
+                            .Legend(legend => legend.Position(ChartLegendPosition.Bottom))
+                            .Tooltip(tooltip => tooltip.Template("${ category } - ${ value }%").Visible(true))
+                            .DataSource(ds=>ds.Read(read=>read.Action("AllFoldersByOU", "Charts")))
+                            //.SeriesColors(new string[] { "#da2c38", "#ef5c6c", "#f7885d", "#97a97c", "#8cb369", "#c9d980", "#fcd57a", "#83c6ce", "#50b2c0", "#179eb1", "#2196f3", "#1976d2", "#023e8a" })
+                            .SeriesColors(new string[] { "#2282A4", "#F4B601", "#ff735d", "#5dffb6", "#885dff", "#ae4fd1", "#99e02f", "#459BB7", "#ff735d", "#5dffb6", "#FF4D50", "#FF4D50", "#CD9900" })
+                            .Series(series => {
+                                series.Pie(model =>
+                                                model.OuAllFolders,
+                                                model => model.OuName
+                                                //null, // Color expression is omitted
+                                                //model => model.Explode
+                                                );
+                            })
+                            )
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+            <div class="col-md-7">
+                <!-- BAR CHART -->
+                <div class="card card-info card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">نمودار تعداد درخواست های ایجاد پوشه به تفکیک معاونت</h3>
+
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-widget="collapse">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            @(Html.Kendo().Chart<FSRM.Models.ViewModels.FoldersOUViewModel>()
+                                            .Name("FolderRequestByOU")
+                                            .Legend(legend => legend.Position(ChartLegendPosition.Bottom))
+                                            .Tooltip(tooltip => tooltip.Template("#= series.name #: #= value #").Visible(true))
+                                            .DataSource(ds => ds.Read(read => read.Action("FolderRequestByOU", "Charts")))
+                                            .Series(series =>
+                                            {
+                                                series.Column(model => model.OpenRequests).Name("درخواست باز").Color("#9A9A9A");
+                                                series.Column(model => model.ClosedRequests).Name("درخواست بسته").Color("#04844C");
+                                            })
+                                            .CategoryAxis(axis => axis
+                                                .Categories(model => model.OuName)
+                                                .MajorGridLines(lines => lines.Visible(false))
+                                                .Line(line => line.Visible(false))
+                                            )
+                                            .ValueAxis(axis => axis
+                                                .Numeric()
+                                                .MajorUnit(1)
+                                                    .Labels(labels => labels.Format("{0:n0}"))
+                                                    .Line(line => line.Visible(false))
+                                                    .MajorGridLines(lines => lines.Visible(true))
+                                            )
+                            )
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+
+        </div>
+    </div>
+</section>

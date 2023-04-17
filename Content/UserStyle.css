@@ -1,0 +1,77 @@
+﻿.PermStatus {
+    color: #032842;
+    /* font-size: medium; */
+    font-weight: 600;
+    opacity: 7;
+}
+
+.PermDate {
+    color: #032842;
+    opacity: 10;
+}
+
+.UserTabStyle {
+    text-decoration: none;
+    font-size: larger;
+}
+
+.CustomBTN {
+    margin: 3px !important;
+    width: 130px;
+}
+
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('~/Content/photo/Ghost.gif') ۵۰% ۵۰% no-repeat rgb(127 183 195);
+}
+
+
+/** {
+    box-sizing: border-box;
+}
+
+html, body {
+    direction: rtl;
+    font-family: iransans;
+    background-color: #fff;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 200px;
+    height: 150px;
+    border-radius: 20px;
+    background-color: #00ff21;
+    padding: 10px 0;
+}
+
+.loading {
+    width: 50px;
+    height: 50px;
+    border: 5px solid;
+    border-color: #2a78ff transparent;
+    border-radius: 50px;
+    animation: spin 3000ms infinite linear;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(Odeg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}*/

@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="db_FSRMEntities-Web.config Connection String" description="db_FSRMEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.DataModel.Model1.csdl|res://*/Models.DataModel.Model1.ssdl|res://*/Models.DataModel.Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=172.20.230.92;initial catalog=db_FSRM;user id=sa;password=qaz123!;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="E:\\_Projects\\LDAP\\FSRM\\FSRM\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='db_FSRMEntities']/@connectionString" />
+  </parameter>
+  <parameter name="db_FSRMEntities1-Web.config Connection String" description="db_FSRMEntities1 Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.DataModel.Model1.csdl|res://*/Models.DataModel.Model1.ssdl|res://*/Models.DataModel.Model1.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=.;initial catalog=db_FSRM;integrated security=True;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="E:\\_Projects\\LDAP\\FSRM\\FSRM\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='db_FSRMEntities1']/@connectionString" />
+  </parameter>
+</parameters>

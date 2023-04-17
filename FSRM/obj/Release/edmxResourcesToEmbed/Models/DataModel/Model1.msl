@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="db_FSRMModelStoreContainer" CdmEntityContainer="db_FSRMEntities">
+    <EntitySetMapping Name="Tbl_AccessEmailsLog">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_AccessEmailsLog">
+        <MappingFragment StoreEntitySet="Tbl_AccessEmailsLog">
+          <ScalarProperty Name="fld_EmailSentMDateTime" ColumnName="fld_EmailSentMDateTime" />
+          <ScalarProperty Name="fld_EmailSentTime" ColumnName="fld_EmailSentTime" />
+          <ScalarProperty Name="fld_EmailSentHDate" ColumnName="fld_EmailSentHDate" />
+          <ScalarProperty Name="fld_EmailBody" ColumnName="fld_EmailBody" />
+          <ScalarProperty Name="fld_EmailAddress" ColumnName="fld_EmailAddress" />
+          <ScalarProperty Name="fld_FK_AccessID" ColumnName="fld_FK_AccessID" />
+          <ScalarProperty Name="fld_EmailsStatus" ColumnName="fld_EmailsStatus" />
+          <ScalarProperty Name="fld_EmailID" ColumnName="fld_EmailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_AccessStatus">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_AccessStatus">
+        <MappingFragment StoreEntitySet="Tbl_AccessStatus">
+          <ScalarProperty Name="fld_AccessStatusDesc" ColumnName="fld_AccessStatusDesc" />
+          <ScalarProperty Name="fld_AccessStatusCode" ColumnName="fld_AccessStatusCode" />
+          <ScalarProperty Name="fld_AccessStatusID" ColumnName="fld_AccessStatusID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_Department">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_Department">
+        <MappingFragment StoreEntitySet="Tbl_Department">
+          <ScalarProperty Name="fld_state" ColumnName="fld_state" />
+          <ScalarProperty Name="fld_DepartmentADName" ColumnName="fld_DepartmentADName" />
+          <ScalarProperty Name="fld_DepartmentName" ColumnName="fld_DepartmentName" />
+          <ScalarProperty Name="fld_DepartmentID" ColumnName="fld_DepartmentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_Folders">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_Folders">
+        <MappingFragment StoreEntitySet="Tbl_Folders">
+          <ScalarProperty Name="fld_AdminCheck" ColumnName="fld_AdminCheck" />
+          <ScalarProperty Name="fld_SuggestedName" ColumnName="fld_SuggestedName" />
+          <ScalarProperty Name="fld_SuggestedAddress" ColumnName="fld_SuggestedAddress" />
+          <ScalarProperty Name="fld_FolderShow" ColumnName="fld_FolderShow" />
+          <ScalarProperty Name="fld_ApprovedSpace" ColumnName="fld_ApprovedSpace" />
+          <ScalarProperty Name="fld_SuggestedSpace" ColumnName="fld_SuggestedSpace" />
+          <ScalarProperty Name="fld_FolderAddress" ColumnName="fld_FolderAddress" />
+          <ScalarProperty Name="fld_FK_FolderOwner" ColumnName="fld_FK_FolderOwner" />
+          <ScalarProperty Name="fld_FolderID" ColumnName="fld_FolderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_FoldersEmailsLog">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_FoldersEmailsLog">
+        <MappingFragment StoreEntitySet="Tbl_FoldersEmailsLog">
+          <ScalarProperty Name="fld_EmailSentMDateTime" ColumnName="fld_EmailSentMDateTime" />
+          <ScalarProperty Name="fld_EmailSentHDate" ColumnName="fld_EmailSentHDate" />
+          <ScalarProperty Name="fld_EmailBody" ColumnName="fld_EmailBody" />
+          <ScalarProperty Name="fld_EmailAddress" ColumnName="fld_EmailAddress" />
+          <ScalarProperty Name="fld_FK_FoldersID" ColumnName="fld_FK_FoldersID" />
+          <ScalarProperty Name="fld_EmailsStatus" ColumnName="fld_EmailsStatus" />
+          <ScalarProperty Name="fld_EmailID" ColumnName="fld_EmailID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_FoldersOwner">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_FoldersOwner">
+        <MappingFragment StoreEntitySet="Tbl_FoldersOwner">
+          <ScalarProperty Name="fld_FolderOwnerEmail" ColumnName="fld_FolderOwnerEmail" />
+          <ScalarProperty Name="fld_FolderOwnerName" ColumnName="fld_FolderOwnerName" />
+          <ScalarProperty Name="fld_FK_FolderOwnerOU" ColumnName="fld_FK_FolderOwnerOU" />
+          <ScalarProperty Name="fld_FolderOwnerID" ColumnName="fld_FolderOwnerID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_FoldersRequestLog">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_FoldersRequestLog">
+        <MappingFragment StoreEntitySet="Tbl_FoldersRequestLog">
+          <ScalarProperty Name="fld_ShowLastLog" ColumnName="fld_ShowLastLog" />
+          <ScalarProperty Name="fld_FolderRequestLogPreviousFolderID" ColumnName="fld_FolderRequestLogPreviousFolderID" />
+          <ScalarProperty Name="fld_FolderRequestLogMDate" ColumnName="fld_FolderRequestLogMDate" />
+          <ScalarProperty Name="fld_FolderRequestLogHDate" ColumnName="fld_FolderRequestLogHDate" />
+          <ScalarProperty Name="fld_FolderRequestLog_PersonModified" ColumnName="fld_FolderRequestLog_PersonModified" />
+          <ScalarProperty Name="fld_FK_FoldersRequestStatusID" ColumnName="fld_FK_FoldersRequestStatusID" />
+          <ScalarProperty Name="fld_FK_FoldersID" ColumnName="fld_FK_FoldersID" />
+          <ScalarProperty Name="fld_FoldersRequstLogID" ColumnName="fld_FoldersRequstLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_FoldersRequstStatus">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_FoldersRequstStatus">
+        <MappingFragment StoreEntitySet="Tbl_FoldersRequstStatus">
+          <ScalarProperty Name="fld_FoldersRequestStatusDescription" ColumnName="fld_FoldersRequestStatusDescription" />
+          <ScalarProperty Name="fld_FoldersRequestStatusCode" ColumnName="fld_FoldersRequestStatusCode" />
+          <ScalarProperty Name="fld_FoldersRequestStatusID" ColumnName="fld_FoldersRequestStatusID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_Personnel">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_Personnel">
+        <MappingFragment StoreEntitySet="Tbl_Personnel">
+          <ScalarProperty Name="fld_FK_DepartmentID" ColumnName="fld_FK_DepartmentID" />
+          <ScalarProperty Name="fld_PersonNO" ColumnName="fld_PersonNO" />
+          <ScalarProperty Name="fld_PersonLName" ColumnName="fld_PersonLName" />
+          <ScalarProperty Name="fld_PersonFName" ColumnName="fld_PersonFName" />
+          <ScalarProperty Name="fld_PersonID" ColumnName="fld_PersonID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_AccessLog">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_AccessLog">
+        <MappingFragment StoreEntitySet="Tbl_AccessLog">
+          <ScalarProperty Name="fld_AccessLogMDate" ColumnName="fld_AccessLogMDate" />
+          <ScalarProperty Name="fld_AccessLogTime" ColumnName="fld_AccessLogTime" />
+          <ScalarProperty Name="fld_AccessLogHDate" ColumnName="fld_AccessLogHDate" />
+          <ScalarProperty Name="fld_ShowLastLog" ColumnName="fld_ShowLastLog" />
+          <ScalarProperty Name="fld_AccessLogPreviousAccessID" ColumnName="fld_AccessLogPreviousAccessID" />
+          <ScalarProperty Name="fld_AccessLogPersonName" ColumnName="fld_AccessLogPersonName" />
+          <ScalarProperty Name="fld_FK_AccessStatus" ColumnName="fld_FK_AccessStatus" />
+          <ScalarProperty Name="fld_FK_AccessID" ColumnName="fld_FK_AccessID" />
+          <ScalarProperty Name="fld_AccessLogID" ColumnName="fld_AccessLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_Access">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_Access">
+        <MappingFragment StoreEntitySet="Tbl_Access">
+          <ScalarProperty Name="fld_AccessShow" ColumnName="fld_AccessShow" />
+          <ScalarProperty Name="fld_AdminChecked" ColumnName="fld_AdminChecked" />
+          <ScalarProperty Name="fld_LastPersonModified" ColumnName="fld_LastPersonModified" />
+          <ScalarProperty Name="fld_AccessModify" ColumnName="fld_AccessModify" />
+          <ScalarProperty Name="fld_AccessWrite" ColumnName="fld_AccessWrite" />
+          <ScalarProperty Name="fld_AccessRead" ColumnName="fld_AccessRead" />
+          <ScalarProperty Name="fld_FK_FolderID" ColumnName="fld_FK_FolderID" />
+          <ScalarProperty Name="fld_FK_PersonID" ColumnName="fld_FK_PersonID" />
+          <ScalarProperty Name="fld_AccessID" ColumnName="fld_AccessID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="db_FSRMModel.sysdiagram">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="definition" ColumnName="definition" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="name" ColumnName="name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_Admins">
+      <EntityTypeMapping TypeName="db_FSRMModel.Tbl_Admins">
+        <MappingFragment StoreEntitySet="Tbl_Admins">
+          <ScalarProperty Name="fld_AdminMDateR" ColumnName="fld_AdminMDateR" />
+          <ScalarProperty Name="fld_AdminMDateA" ColumnName="fld_AdminMDateA" />
+          <ScalarProperty Name="fld_AdminStatus" ColumnName="fld_AdminStatus" />
+          <ScalarProperty Name="fld_AdminShow" ColumnName="fld_AdminShow" />
+          <ScalarProperty Name="fld_AdminADName" ColumnName="fld_AdminADName" />
+          <ScalarProperty Name="fld_AdminName" ColumnName="fld_AdminName" />
+          <ScalarProperty Name="fld_AdminID" ColumnName="fld_AdminID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

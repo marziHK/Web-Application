@@ -1,0 +1,313 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+<style>
+    /* The Modal (background) */
+    .modal {
+        direction: ltr !important;
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        direction: ltr !important;
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script>
+
+    function setVisible(dataItem) {
+        let ret = dataItem.EnableEdit;
+        if (dataItem.EnableDel == false) {
+            ret = false;
+
+        }
+        return ret;
+    }
+    function setVisibleR(dataItem) {
+        //debugger;
+        //let ret = dataItem.EnableDel
+        //if (dataItem.EnableDel == false) {
+        //    ret = false;
+        //}
+        //return ret;
+        return dataItem.EnableDel;
+    }
+</script>
+
+
+<br />
+
+@(Html.Kendo().Grid<FSRM.Models.ViewModels.UserFolderViewModel>
+    ().Name("UserFolder-grid")
+    .Columns(columns => {
+        columns.Bound(c => c.FolderID).Title("ID").Width(50).Hidden();
+        columns.Bound(c => c.SugFolderName).Title("نام پیشنهادی ").HtmlAttributes(new {AutoCompleteType = "Disabled", id = "SugFolderName" });//.Width(100);
+        columns.Bound(c => c.SugFolderAddress).Title("آدرس پیشنهادی").HtmlAttributes(new { style = "direction: ltr;", id = "select", autocomplete = "off" });//.Width(300);
+        columns.Bound(c => c.SugFolderValue).Title("حجم پیشنهادی (GB)").EditorTemplateName("Integer").Width(150);
+        columns.Bound(c => c.FolderAddress).Title("آدرس نهایی").HtmlAttributes(new { style = "direction: ltr;"});
+        columns.Bound(c => c.ApprovedFolderValue).Title("حجم تصویب شده (GB)").Width(150);
+        columns.Bound(c => c.ReqHDate).Title("تاریخ ثبت درخواست").HtmlAttributes(new { @class = "PermDate" }).Width(120);
+        columns.Bound(c => c.RequestStatus).Title("وضعیت درخواست").HtmlAttributes(new { @class = "PermStatus" });
+        columns.Bound(c => c.StatusCode).Hidden();
+        columns.Command(command => {
+            command.Edit().Text("ویرایش").Visible("setVisible").CancelText("انصراف").UpdateText("ذخیره").HtmlAttributes(new { @class = "CustomBTN" });
+            command.Destroy().Text("حذف").Visible("setVisibleR").HtmlAttributes(new { @class = "CustomBTN" });
+            command.Custom("رهگیری درخواست").HtmlAttributes(new { id = "test" }).Click("ShowLogg").HtmlAttributes(new { @class = "CustomBTN" });
+        } ).Title("ملاحظات");//.Width(200); //}
+
+
+    })
+
+    .HtmlAttributes(new { style = "height:1000px; margin:auto; " })//width: 1500px; height: 500px;
+    .PersistSelection()
+    .Editable(editable => editable.Mode(GridEditMode.InLine).DisplayDeleteConfirmation(false).ConfirmDelete("آیا از حذف این گزینه مطمئن هستید؟").DisplayDeleteConfirmation("آیا از حذف این گزینه مطمئن هستید؟"))
+    //.Events(events => events.Edit("onEdit"))
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .Read(read => read.Action("ReadUserFolders_ByUser", "Folder"))
+    .Update(update => update.Action("UpdateUserFolders_ByUser", "Folder"))
+    .Create(create => create.Action("CreateUserFolders_ByUser", "Folder"))
+    .Destroy(delete => delete.Action("RemoveUserFolders_ByUser", "Folder"))
+    .PageSize(15)
+    .Model(m => {
+        m.Id(p => p.FolderID);
+    })
+    .ServerOperation(true)
+    .Events(events =>
+    {
+        events.RequestEnd("onRequestEnd"); //I've added this
+    })
+    )
+
+    .Scrollable()
+    .Sortable()
+    .Pageable()
+    .Resizable(r => r.Columns(true))
+    .ToolBar(t => t.Create().Text("ایجاد درخواست جدید"))
+    )
+<!-- Tooltip for show adress -->
+@(Html.Kendo().Tooltip()
+    .For("#UserFolder-grid")
+    .Filter("td:nth-child(5)")
+    .ContentHandler("toolTp1")
+    .Position(TooltipPosition.Right)
+    .Width(500)
+    .AutoHide(true)
+)
+@*<script>
+        function toolTp(e) {
+
+            debugger;
+            var grid = $('#UserFolder-grid').data('kendoGrid');
+            var dataItem = grid.dataItem(e.target.closest("tr"));
+            var txt = dataItem.FolderAddress;
+            return txt;
+        };
+    </script>*@
+
+@(Html.Kendo().Tooltip()
+    .For("#UserFolder-grid")
+    .Filter("td:nth-child(3)")
+    .ContentHandler("toolTp2")
+    .Position(TooltipPosition.Left)
+    .Width(500)
+    .AutoHide(true)
+)
+
+
+<script>
+
+
+</script>
+
+
+<!-- The Modal Show Log-->
+<div id="SelectedLog">
+    @(Html.Kendo().Window().Name("DetailsF").HtmlAttributes(new { id = "DetailsF"})
+        .Title("رهگیری درخواست ایجاد پوشه")
+        .Visible(false)
+        .Modal(true)
+        .Draggable(true)
+        .Width(600)
+        .Height(400)
+       )
+</div>
+
+<!-- For Show Folder Log-->
+<!-- The Modal Address-->
+<div id="SelectFileModal2" class="modal" data-selected="">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close" onclick="{ $('#SelectFileModal2').hide()}">&times;</span>
+
+        <div class="col">
+            <p class="alert FsAddress" id="cdir"></p>
+        </div>
+        <button id="btn-back" onclick="getdir('>back<')" class="btn BtnBckFsAdd" data-url="">بازگشت</button>
+
+        <div class="col">
+            <div id="files">
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- For Address -->
+<script>
+    var address = [];
+    function getdir(mydir)
+    {
+        $('input[name *= "SugFolderAddress"]').attr("readonly", true);
+        var DirBack = $('#cdir').html();
+
+        if (mydir == '') {
+            address = [];
+        }
+        else if (mydir == '>back<') {
+            mydir = address.pop()
+        }
+        else {
+            address.push(DirBack);
+        }
+
+
+
+        //$('#btn-back').attr('onclick', 'getdir(\'' + DirBack +'\')');
+        $('#cdir').html(mydir)
+
+        $.post('@Url.Action("GetDir", "User")',   // url
+            { dir: mydir }, // data to be submit
+            function (data, status, jqXHR) {// success callback
+                dir = JSON.parse(data);
+                $('#SelectFileModal2').find("#files").html('');
+                for (let x in dir) {
+                    $('#SelectFileModal2').find("#files").append(`<div>
+                                             <p onclick = "getdir(&quot;` + dir[x] + `&quot;)"  style="cursor:pointer"  >` + dir[x] + `</p>
+                                             <a class="btn btn-sm BtnSelecFolder" id="select" onclick="print(&quot;` + dir[x] + `&quot;)" >انتخاب آدرس</a>
+                                        </div>`)
+                }
+                if (dir.keys.length == 0) {
+                    $('#SelectFileModal2').find("#files").append(`<div> ... </div>`)
+                }
+
+            })
+
+    }
+
+    function print(dir) {
+
+        //console.log(dir);
+        var uid = $('#SelectFileModal2').data('selected')
+        $('*[data-uid="' + uid + '"]').find('#SugFolderAddress').val(dir).change();;
+        $('#SelectFileModal2').hide();
+    };
+
+</script>
+
+
+<!-- For Grid Folder -->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#UserFolders").on('keypress', '#SugFolderName', function (event) {
+            var ew = event.which;
+
+            if (48 <= ew && ew <= 57)
+                return true;
+            if (65 <= ew && ew <= 90)
+                return true;
+            if (97 <= ew && ew <= 122)
+                return true;
+            return false;
+        });
+    });
+
+    var inFocus = false;
+    $('#UserFolder-grid').on('focus', '#SugFolderAddress', function () {
+        //debugger;
+        $('input[name *= "SugFolderAddress"]').attr("readonly", true);
+        getdir('');
+        var id = $(this).closest('tr').data('uid');
+
+        $('#SelectFileModal2').data('selected', id);
+        $('#SelectFileModal2').show();
+    });
+
+    $('#UserFolder-grid').on('click', '#SugFolderAddress', function () {
+        $('input[name *= "SugFolderAddress"]').attr("readonly", true);
+        getdir('');
+        var id = $(this).closest('tr').data('uid');
+
+        $('#SelectFileModal2').data('selected', id);
+        $('#SelectFileModal2').show();
+    })
+
+    function onRequestEnd(e) {
+
+        if (e.type == "create" || e.type == "update") {
+            var grid = $("#UserFolder-grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+    }
+
+    //function onEdit(e) {
+    //    if (!e.model.isNew()) {
+
+    //        $('input[name *= "PersonFName"]').attr("readonly", true);
+    //        $('input[name *= "PersonLName"]').attr("readonly", true);
+    //        $('input[name *= "PersonNO"]').attr("readonly", true);
+    //        $('input[name *= "FolderAddress"]').attr("disabled", "disabled");
+    //    }
+    //}
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>
+

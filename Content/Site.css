@@ -1,0 +1,182 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: "IranSans" !important;
+}
+
+@font-face {
+    font-family: "IranSans";
+    src: url("../fonts/IRANSansWeb(FaNum)_UltraLight.woff2") format("woff2"), url("../fonts/IRANSansWeb(FaNum)_UltraLight.woff") format("woff"), url("../fonts/IRANSansWeb(FaNum)_UltraLight.ttf") format("ttf");
+}
+
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+
+/* -------------------------------------------------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: 'IranSans', sans-serif;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+h1 {
+    line-height: 60px;
+}
+
+h4 {
+    line-height: 30px;
+}
+
+p {
+    font-size: 16px;
+    font-family: 'IranSans', sans-serif;
+    font-weight: 300;
+    line-height: 27px;
+}
+
+header {
+    width: 100%;
+    height: auto;
+    border-top: 3px solid #07568e;
+    border-bottom: 1px solid #e7e1e1;
+    background: #fff;
+    padding: 7px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1030;
+    /*padding: 0px 0;*/
+    /*border-bottom: 1px solid #c4122f;*/
+}
+
+    header .logo {
+        max-width: 200px;
+    }
+
+.Users {
+    margin-top: 20px;
+}
+
+.UserInfo {
+    line-height: 23px;
+    margin-right: 25px;
+    font-weight: 700;
+}
+
+.grayText {
+    color: #77787a;
+}
+
+.blueText {
+    color: #0173b1;
+}
+
+.BackToPortal {
+    float: left;
+    background-color: #d7d7d7;
+    margin-top: 17px;
+    margin-bottom: 7px;
+    font-size: 16px;
+}
+
+    .BackToPortal:hover {
+        background-color: #0173b1;
+        color: #fff
+    }
+
+.jumbotron {
+    margin-top:25px;
+    width: 100%;
+    min-height: 450px;
+    /*background:;*/
+    background: url("photo/Backimg.jpg") center center;
+    background-size: cover;
+    opacity: 1;
+    display: table;
+    width: 100%;
+    position: relative;
+    border-radius: 0px;
+    color: white;
+    text-transform: uppercase;
+    /*margin: 0;*/
+    clip-path: url(#poly);
+    overflow: hidden;
+    padding: 0px !important;
+}
+
+.form-container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 3px;
+    margin-top: -120px;
+    min-height: 300px;
+    margin-bottom: 50px;
+    /*border: 5px solid #555;*/
+    box-shadow: 0 4px 10px 0 #5555556b, 0 8px 10px 0 #5555556b;
+}
+
+
+    .form-container h4 {
+        margin: 0;
+    }
+
+
+
+
+footer {
+    text-align: center;
+    color: #fff;
+    position: fixed;
+    background: #032842;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    padding: 10px 0;
+    font-size: 12px;
+    margin-bottom: 0px;
+}
+
+
+
+.FsAddress {
+    color: #0173b1;
+    background-color: #fff;
+    border-color: #025172;
+}
+
+.BtnBckFsAdd {
+    background-color: #07678f !important;
+    color: white !important;
+    font-size: 14px !important;
+    width: 130px !important;
+    margin: auto !important;
+}
+.BtnSelecFolder {
+    background-color: #07678f !important;
+    color: white !important;
+    font-size: 12px !important;
+}

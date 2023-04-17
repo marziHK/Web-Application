@@ -1,0 +1,109 @@
+﻿
+@{
+    ViewBag.Title = "Panel";
+    Layout = "~/Views/Shared/_LyHome.cshtml";
+}
+
+
+<div id="Tabs" role="tabpanel">
+    <!-- Tab Buttons -->
+    <ul id="tabstrip" class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#UserPermits" role="tab" data-toggle="tab" class="UserTabStyle">دسترسی ها</a>
+        </li>
+        <li>
+            <a href="#UserFolders" role="tab" data-toggle="tab" class="UserTabStyle">پوشه ها</a>
+        </li>
+    </ul>
+
+    <!-- Tab Content Containers -->
+    <div class="tab-content">
+        <div class="tab-pane in active" id="UserPermits">
+            <!-- Call partial view to load initial page load data -->
+            @Html.Partial("UserPermits")
+
+        </div>
+        <div class="tab-pane " id="UserFolders">
+            @*@Html.Partial("UserFolders")*@
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#tabstrip a').click(function (e) {
+        e.preventDefault();
+        var scrollHeight = $(document).scrollTop();
+
+        var tabID = $(this).attr("href").substr(1);
+        //$(".tab-pane").each(function () {
+        //    console.log("clearing " + $(this).attr("id") + " tab");
+        //    $(this).empty();
+        //});
+
+        $.ajax({
+            url: "/@ViewContext.RouteData.Values["controller"]/" + tabID,
+            cache: false,
+            type: "get",
+            dataType: "html",
+            success: function (result) {
+                $("#" + tabID).html(result);
+            }
+
+        })
+        $(this).tab('show')
+
+        setTimeout(function () {
+            $(window).scrollTop(scrollHeight);
+        }, 5);
+});
+</script>
+
+
+
+
+
+<script>
+
+
+        var DetailsLog;
+        function ShowLogg(e) {
+            e.preventDefault();
+            var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        $.ajax({
+            url: '@Url.Action("Read_FolderLog", "User")',
+            data: {
+                FolderID: dataItem.FolderID
+            },
+            dataType: "text",
+            type: "POST",
+            error: function () {
+                alert("Unexpected Error Occurred");
+            },
+            success: function (data) {
+                DetailsLog = JSON.parse(data);
+                var ht = "<table class='table table-bordered'><thead><tr><th scope='col'>وضعیت</th><th scope='col'>تاریخ</th></tr></thead>";
+                for (let x in DetailsLog.Data) {
+
+                    ht += `<tr>
+                                <td>` + DetailsLog.Data[x].FolderStatusDesc+ `</td>
+                                <td>` + DetailsLog.Data[x].LogHDate + `</td>
+                            </tr>`;
+
+                }
+                ht += "</table>";
+                $("#DetailsF").html(ht);
+            }
+        });
+
+            var wnd = $("#DetailsF").data("kendoWindow");
+
+        wnd.center().open();
+    }
+
+
+</script>
+
+
+

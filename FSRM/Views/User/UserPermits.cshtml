@@ -1,0 +1,361 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+
+<style>
+    /* The Modal (background) */
+    .modal {
+        direction: ltr !important;
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        direction: ltr !important;
+        background-color: #fefefe;
+        margin: 15% auto; /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%; /* Could be more or less, depending on screen size */
+    }
+
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+</style>
+
+<script>
+    $(document).ready(function () {
+        // alert("ready!");
+        $('input[name *= "FolderAddress"]').attr("disabled", "disabled");
+
+    });
+
+    function setVisible(dataItem) {
+        let ret = dataItem.EnableEdit;
+        if (dataItem.EnableDel == false) {
+            ret = false;
+
+        }
+        return ret;
+    }
+    function setVisibleR(dataItem) {
+        return dataItem.EnableDel;
+    }
+</script>
+
+<br />
+
+
+@(Html.Kendo().Grid<FSRM.Models.ViewModels.UserPermitViewModel>().Name("AllAccess-grid").Columns(columns => {
+//columns.Bound(c => c.AccessID).Title("ID").Hidden();
+columns.Bound(c => c.PersonFName).Title("نام ").HtmlAttributes(new {AutoCompleteType = "Disabled" });//.Width(100);
+columns.Bound(c => c.PersonLName).Title("نام خانودگی").HtmlAttributes(new {AutoCompleteType = "Disabled" });//.Width(150);
+columns.Bound(c => c.PersonNO).Title("شماره پرسنلی").HtmlAttributes(new { id = "PersonNO" });//.Width(100);
+columns.Bound(c => c.PersonID).Hidden();
+columns.Bound(c => c.UserOU).ClientTemplate("#: UserOU.OUFaName #").Title("معاونت").HtmlAttributes(new { name="UserOU" , id= "idUserOU" } ); //.Width(230);
+columns.Bound(c => c.FolderAddress).Title("مسیر پوشه").HtmlAttributes(new { style = "direction: ltr;", id = "select", autocomplete = "off" });//.Width(300);
+columns.Bound(c => c.FolderID).Hidden();
+columns.Bound(c => c.AccessRead).Template(@<input type="checkbox" />).Title("Read").Width(100);
+columns.Bound(c => c.AccessWrite).Template(@<input type="checkbox" />).Title("Write").Width(100);
+columns.Bound(c => c.AccessModify).Template(@<input type="checkbox" />).Title("Modify").Width(100);
+    columns.Bound(c => c.AccessStatus).Title("وضعیت درخواست").HtmlAttributes(new { @class= "PermStatus" });
+    columns.Bound(c=>c.HDate).Title("تاریخ ثبت درخواست").HtmlAttributes(new { @class = "PermDate" });
+    columns.Command(command => {
+        command.Edit().Text("ویرایش").Visible("setVisible").CancelText("انصراف").UpdateText("ذخیره").HtmlAttributes(new { @class = "CustomBTN" });
+        command.Destroy().Text("حذف").Visible("setVisibleR").HtmlAttributes(new { @class = "CustomBTN" });
+        command.Custom("رهگیری درخواست").Click("ShowLog").HtmlAttributes(new { @class = "CustomBTN" });
+    }).Title("ملاحظات");//.Width(200); //}
+})
+    .HtmlAttributes(new { style = "height:1000px; margin:auto; " })//width: 1500px; height: 500px;
+    .PersistSelection()
+    .Editable(editable => editable.Mode(GridEditMode.InLine).DisplayDeleteConfirmation(false).ConfirmDelete("آیا از حذف این گزینه مطمئن هستید؟").DisplayDeleteConfirmation("آیا از حذف این گزینه مطمئن هستید؟"))
+    .Events(events => events.Edit("onEdit"))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Read(read => read.Action("ReadUserPermits_ByUser", "Permits"))
+        .Update(update => update.Action("UpdateUserPermits_ByUser", "Permits"))
+        .Create(create => create.Action("CreateUserPermits_ByUser", "Permits"))
+        .Destroy(delete => delete.Action("RemoveUserPermits_ByUser", "Permits"))
+        .PageSize(15)
+        .Model(m => {
+            m.Id(p => p.AccessID);
+            m.Field(p => p.UserOU).DefaultValue(
+                ViewData["defaultOU"] as FSRM.Models.ViewModels.OUsViewModel);
+        })
+        .ServerOperation(true)
+        .Events(events =>
+        {
+            events.RequestEnd("onRequestEnd"); //I've added this
+        })
+        )
+
+    .Scrollable()
+    .Sortable()
+    .Pageable()
+    .Resizable(r => r.Columns(true))
+    .ToolBar(t => t.Create().Text("ایجاد دسترسی جدید"))
+    )
+
+
+
+<!-- Tooltip for show adress -->
+@(Html.Kendo().Tooltip()
+    .For("#AllAccess-grid")
+    .Filter("td:nth-child(6)")
+    .ContentHandler("toolTipContent")
+    .Position(TooltipPosition.Right)
+    .Width(500)
+    .AutoHide(true)
+)
+<script>
+    function toolTipContent(e) {
+
+        debugger;
+        var grid = $('#AllAccess-grid').data('kendoGrid');
+        var dataItem = grid.dataItem(e.target.closest("tr"));
+        var txt = dataItem.FolderAddress;
+        return txt;
+    }
+</script>
+
+<!-- The Modal Show Log-->
+@(Html.Kendo().Window().Name("Details")
+    .Title("رهگیری درخواست دسترسی")
+    .Visible(false)
+    .Modal(true)
+    .Draggable(true)
+    .Width(600)
+    .Height(400)
+   )
+<!-- For Show Permits Log-->
+<script type="text/javascript">
+    var DetailsLog;
+    function ShowLog(e) {
+
+        e.preventDefault();
+
+        $("#Details").html('');
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        $.ajax({
+            url: "@Url.Action("Read_AccessLog", "User")",
+            data: {
+                AccID: dataItem.AccessID
+            },
+            dataType: "text",
+            type: "POST",
+            error: function () {
+                alert("Unexpected Error Occurred");
+            },
+            success: function (data) {
+                DetailsLog = JSON.parse(data);
+                var ht = "<table class='table table-bordered table-striped'><thead><tr><th scope='col'>وضعیت</th><th scope='col'>تغییرات</th><th scope='col'>تاریخ</th></tr></thead>";
+                for (let x in DetailsLog.Data) {
+
+                    ht += `<tr>
+                                <td> ` + DetailsLog.Data[x].AccessStatusDesc + `</td>
+                                <td> ` + DetailsLog.Data[x].Changes + `</td>
+                                <td> ` + DetailsLog.Data[x].LogHDate+ `</td>
+                            </tr>`;
+
+                }
+                ht += "</table>";
+                $("#Details").html(ht);
+            }
+
+
+        });
+
+
+        var wnd = $("#Details").data("kendoWindow");
+
+        wnd.center().open();
+    }
+</script>
+
+<!-- The Modal Address-->
+<div id="SelectFileModal" class="modal" data-selected="">
+
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close" onclick="{ $('#SelectFileModal').hide()}">&times;</span>
+
+        <div class="col">
+            <p class="alert FsAddress" id="cdir"></p>
+        </div>
+        <button id="btn-back" onclick="getdir('>back<')" class="btn BtnBckFsAdd" data-url="">بازگشت</button>
+
+        <div class="col">
+            <div id="files">
+
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
+
+
+<!-- For Address -->
+<script>
+    var address = [];
+    function getdir(mydir)
+    {
+        var DirBack = $('#cdir').html();
+
+        if (mydir == '') {
+            address = [];
+        }
+        else if (mydir == '>back<') {
+            mydir = address.pop()
+        }
+        else {
+            address.push(DirBack);
+        }
+
+
+
+        //$('#btn-back').attr('onclick', 'getdir(\'' + DirBack +'\')');
+        $('#cdir').html(mydir)
+
+        $.post('@Url.Action("GetDir", "User")',   // url
+            { dir: mydir }, // data to be submit
+            function (data, status, jqXHR) {// success callback
+
+                dir = JSON.parse(data);
+                $("#files").html('');
+                for (let x in dir) {
+                    $("#files").append(`<div>
+                                             <p onclick = "getdir(&quot;` + dir[x] + `&quot;)"  style="cursor:pointer"  >` + dir[x] + `</p>
+                                             <a class="btn btn-sm BtnSelecFolder" id="select" onclick="print(&quot;` + dir[x] + `&quot;)" >انتخاب آدرس</a>
+                                        </div>`)
+                }
+                if (dir.keys.length == 0) {
+                    $("#files").append(`<div> ... </div>`)
+                }
+
+            })
+
+    }
+
+    function print(dir) {
+
+        //console.log(dir);
+        var uid = $('#SelectFileModal').data('selected')
+        $('*[data-uid="' + uid + '"]').find('#FolderAddress').val(dir).change();;
+        $('#SelectFileModal').hide();
+    };
+
+</script>
+
+
+<!-- For Grid Permits -->
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#AllAccess-grid').on('keypress', '#PersonNO', function (event) {
+            var ew = event.which;
+            if (48 <= ew && ew <= 57)
+                return true;
+            //if (65 <= ew && ew <= 90)
+            //    return true;
+            //if (97 <= ew && ew <= 122)
+            //    return true;
+            return false;
+        });
+    });
+
+    $(document).ready(function () {
+        $('#AllAccess-grid').on('keypress', '#PersonFName', function (event) {
+            var ew = event.which;
+            if (48 <= ew && ew <= 57)
+                return false;
+            return true;
+        });
+    });
+    $(document).ready(function () {
+        $('#AllAccess-grid').on('keypress', '#PersonLName', function (event) {
+            var ew = event.which;
+            if (48 <= ew && ew <= 57)
+                return false;
+            return true;
+        });
+    });
+
+
+    $('#AllAccess-grid').on('click', '#FolderAddress', function () {
+        $('input[name *= "FolderAddress"]').attr("readonly", true);
+        getdir('');
+        var id = $(this).closest('tr').data('uid');
+
+        $('#SelectFileModal').data('selected', id);
+        $('#SelectFileModal').show();
+
+    })
+
+    $('#AllAccess-grid').on('focus', '#FolderAddress', function () {
+        $('input[name *= "FolderAddress"]').attr("readonly", true);
+        getdir('');
+        var id = $(this).closest('tr').data('uid');
+
+        $('#SelectFileModal').data('selected', id);
+        $('#SelectFileModal').show();
+
+    })
+
+    function onRequestEnd(e) {
+
+        if (e.type == "create" || e.type == "update") {
+            var grid = $("#AllAccess-grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+    }
+
+    function onEdit(e) {
+        if (!e.model.isNew()) {
+
+            $(e.container.find('#idUserOU')).html(e.model.UserOU.OUFaName)
+            $('input[name *= "PersonFName"]').attr("readonly", true);
+            $('input[name *= "PersonLName"]').attr("readonly", true);
+            $('input[name *= "PersonNO"]').attr("readonly", true);
+            $('input[name *= "FolderAddress"]').attr("disabled", "disabled");
+        }
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

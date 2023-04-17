@@ -1,0 +1,308 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="db_FSRMModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="db_FSRMEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tbl_AccessEmailsLog" EntityType="db_FSRMModel.Tbl_AccessEmailsLog" />
+    <EntitySet Name="Tbl_AccessStatus" EntityType="db_FSRMModel.Tbl_AccessStatus" />
+    <EntitySet Name="Tbl_Department" EntityType="db_FSRMModel.Tbl_Department" />
+    <EntitySet Name="Tbl_Folders" EntityType="db_FSRMModel.Tbl_Folders" />
+    <EntitySet Name="Tbl_FoldersEmailsLog" EntityType="db_FSRMModel.Tbl_FoldersEmailsLog" />
+    <EntitySet Name="Tbl_FoldersOwner" EntityType="db_FSRMModel.Tbl_FoldersOwner" />
+    <EntitySet Name="Tbl_FoldersRequestLog" EntityType="db_FSRMModel.Tbl_FoldersRequestLog" />
+    <EntitySet Name="Tbl_FoldersRequstStatus" EntityType="db_FSRMModel.Tbl_FoldersRequstStatus" />
+    <AssociationSet Name="FK_Tbl_FolderRequestLog_Tbl_Folders" Association="db_FSRMModel.FK_Tbl_FolderRequestLog_Tbl_Folders">
+      <End Role="Tbl_Folders" EntitySet="Tbl_Folders" />
+      <End Role="Tbl_FoldersRequestLog" EntitySet="Tbl_FoldersRequestLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Folders_Tbl_FoldersOwner" Association="db_FSRMModel.FK_Tbl_Folders_Tbl_FoldersOwner">
+      <End Role="Tbl_FoldersOwner" EntitySet="Tbl_FoldersOwner" />
+      <End Role="Tbl_Folders" EntitySet="Tbl_Folders" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus" Association="db_FSRMModel.FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus">
+      <End Role="Tbl_FoldersRequstStatus" EntitySet="Tbl_FoldersRequstStatus" />
+      <End Role="Tbl_FoldersRequestLog" EntitySet="Tbl_FoldersRequestLog" />
+    </AssociationSet>
+    <EntitySet Name="Tbl_Personnel" EntityType="db_FSRMModel.Tbl_Personnel" />
+    <AssociationSet Name="FK_Tbl_Personnel_Tbl_Department" Association="db_FSRMModel.FK_Tbl_Personnel_Tbl_Department">
+      <End Role="Tbl_Department" EntitySet="Tbl_Department" />
+      <End Role="Tbl_Personnel" EntitySet="Tbl_Personnel" />
+    </AssociationSet>
+    <EntitySet Name="Tbl_AccessLog" EntityType="db_FSRMModel.Tbl_AccessLog" />
+    <AssociationSet Name="FK_Tbl_AccessLog_Tbl_AccessStatus" Association="db_FSRMModel.FK_Tbl_AccessLog_Tbl_AccessStatus">
+      <End Role="Tbl_AccessStatus" EntitySet="Tbl_AccessStatus" />
+      <End Role="Tbl_AccessLog" EntitySet="Tbl_AccessLog" />
+    </AssociationSet>
+    <EntitySet Name="Tbl_Access" EntityType="db_FSRMModel.Tbl_Access" />
+    <AssociationSet Name="FK_Tbl_Access_Tbl_Folders" Association="db_FSRMModel.FK_Tbl_Access_Tbl_Folders">
+      <End Role="Tbl_Folders" EntitySet="Tbl_Folders" />
+      <End Role="Tbl_Access" EntitySet="Tbl_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_Access_Tbl_Personnel" Association="db_FSRMModel.FK_Tbl_Access_Tbl_Personnel">
+      <End Role="Tbl_Personnel" EntitySet="Tbl_Personnel" />
+      <End Role="Tbl_Access" EntitySet="Tbl_Access" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_AccessLog_Tbl_Access" Association="db_FSRMModel.FK_Tbl_AccessLog_Tbl_Access">
+      <End Role="Tbl_Access" EntitySet="Tbl_Access" />
+      <End Role="Tbl_AccessLog" EntitySet="Tbl_AccessLog" />
+    </AssociationSet>
+    <EntitySet Name="sysdiagrams" EntityType="db_FSRMModel.sysdiagram" />
+    <EntitySet Name="Tbl_Admins" EntityType="db_FSRMModel.Tbl_Admins" />
+  </EntityContainer>
+  <EntityType Name="Tbl_AccessEmailsLog">
+    <Key>
+      <PropertyRef Name="fld_EmailID" />
+    </Key>
+    <Property Name="fld_EmailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_EmailsStatus" Type="Int32" Nullable="false" />
+    <Property Name="fld_FK_AccessID" Type="Int32" Nullable="false" />
+    <Property Name="fld_EmailAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailSentHDate" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailSentTime" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailSentMDateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="Tbl_AccessStatus">
+    <Key>
+      <PropertyRef Name="fld_AccessStatusID" />
+    </Key>
+    <Property Name="fld_AccessStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_AccessStatusCode" Type="Int32" Nullable="false" />
+    <Property Name="fld_AccessStatusDesc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tbl_AccessLog" Relationship="db_FSRMModel.FK_Tbl_AccessLog_Tbl_AccessStatus" FromRole="Tbl_AccessStatus" ToRole="Tbl_AccessLog" />
+  </EntityType>
+  <EntityType Name="Tbl_Department">
+    <Key>
+      <PropertyRef Name="fld_DepartmentID" />
+    </Key>
+    <Property Name="fld_DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fld_DepartmentADName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fld_state" Type="Int32" />
+    <NavigationProperty Name="Tbl_Personnel" Relationship="db_FSRMModel.FK_Tbl_Personnel_Tbl_Department" FromRole="Tbl_Department" ToRole="Tbl_Personnel" />
+  </EntityType>
+  <EntityType Name="Tbl_Folders">
+    <Key>
+      <PropertyRef Name="fld_FolderID" />
+    </Key>
+    <Property Name="fld_FolderID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_FK_FolderOwner" Type="Int32" Nullable="false" />
+    <Property Name="fld_FolderAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fld_SuggestedSpace" Type="Int32" />
+    <Property Name="fld_ApprovedSpace" Type="Int32" />
+    <Property Name="fld_FolderShow" Type="Boolean" />
+    <NavigationProperty Name="Tbl_FoldersRequestLog" Relationship="db_FSRMModel.FK_Tbl_FolderRequestLog_Tbl_Folders" FromRole="Tbl_Folders" ToRole="Tbl_FoldersRequestLog" />
+    <NavigationProperty Name="Tbl_FoldersOwner" Relationship="db_FSRMModel.FK_Tbl_Folders_Tbl_FoldersOwner" FromRole="Tbl_Folders" ToRole="Tbl_FoldersOwner" />
+    <NavigationProperty Name="Tbl_Access" Relationship="db_FSRMModel.FK_Tbl_Access_Tbl_Folders" FromRole="Tbl_Folders" ToRole="Tbl_Access" />
+    <Property Name="fld_SuggestedAddress" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fld_SuggestedName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="fld_AdminCheck" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersEmailsLog">
+    <Key>
+      <PropertyRef Name="fld_EmailID" />
+    </Key>
+    <Property Name="fld_EmailID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_EmailsStatus" Type="Int32" Nullable="false" />
+    <Property Name="fld_FK_FoldersID" Type="Int32" Nullable="false" />
+    <Property Name="fld_EmailAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailSentHDate" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="fld_EmailSentMDateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersOwner">
+    <Key>
+      <PropertyRef Name="fld_FolderOwnerID" />
+    </Key>
+    <Property Name="fld_FolderOwnerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_FK_FolderOwnerOU" Type="Int32" />
+    <Property Name="fld_FolderOwnerName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="fld_FolderOwnerEmail" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tbl_Folders" Relationship="db_FSRMModel.FK_Tbl_Folders_Tbl_FoldersOwner" FromRole="Tbl_FoldersOwner" ToRole="Tbl_Folders" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersRequestLog">
+    <Key>
+      <PropertyRef Name="fld_FoldersRequstLogID" />
+    </Key>
+    <Property Name="fld_FoldersRequstLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_FK_FoldersID" Type="Int32" />
+    <Property Name="fld_FK_FoldersRequestStatusID" Type="Int32" />
+    <Property Name="fld_FolderRequestLog_PersonModified" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="fld_FolderRequestLogHDate" Type="Int32" />
+    <Property Name="fld_FolderRequestLogMDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Tbl_Folders" Relationship="db_FSRMModel.FK_Tbl_FolderRequestLog_Tbl_Folders" FromRole="Tbl_FoldersRequestLog" ToRole="Tbl_Folders" />
+    <NavigationProperty Name="Tbl_FoldersRequstStatus" Relationship="db_FSRMModel.FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus" FromRole="Tbl_FoldersRequestLog" ToRole="Tbl_FoldersRequstStatus" />
+    <Property Name="fld_FolderRequestLogPreviousFolderID" Type="Int32" />
+    <Property Name="fld_ShowLastLog" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="Tbl_FoldersRequstStatus">
+    <Key>
+      <PropertyRef Name="fld_FoldersRequestStatusID" />
+    </Key>
+    <Property Name="fld_FoldersRequestStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_FoldersRequestStatusCode" Type="Int32" />
+    <Property Name="fld_FoldersRequestStatusDescription" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tbl_FoldersRequestLog" Relationship="db_FSRMModel.FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus" FromRole="Tbl_FoldersRequstStatus" ToRole="Tbl_FoldersRequestLog" />
+  </EntityType>
+  <Association Name="FK_Tbl_FolderRequestLog_Tbl_Folders">
+    <End Type="db_FSRMModel.Tbl_Folders" Role="Tbl_Folders" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_FoldersRequestLog" Role="Tbl_FoldersRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Folders">
+        <PropertyRef Name="fld_FolderID" />
+      </Principal>
+      <Dependent Role="Tbl_FoldersRequestLog">
+        <PropertyRef Name="fld_FK_FoldersID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Folders_Tbl_FoldersOwner">
+    <End Type="db_FSRMModel.Tbl_FoldersOwner" Role="Tbl_FoldersOwner" Multiplicity="1" />
+    <End Type="db_FSRMModel.Tbl_Folders" Role="Tbl_Folders" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_FoldersOwner">
+        <PropertyRef Name="fld_FolderOwnerID" />
+      </Principal>
+      <Dependent Role="Tbl_Folders">
+        <PropertyRef Name="fld_FK_FolderOwner" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_FolderRequestLog_Tbl_FoldersRequstStatus">
+    <End Type="db_FSRMModel.Tbl_FoldersRequstStatus" Role="Tbl_FoldersRequstStatus" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_FoldersRequestLog" Role="Tbl_FoldersRequestLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_FoldersRequstStatus">
+        <PropertyRef Name="fld_FoldersRequestStatusID" />
+      </Principal>
+      <Dependent Role="Tbl_FoldersRequestLog">
+        <PropertyRef Name="fld_FK_FoldersRequestStatusID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Tbl_Personnel">
+    <Key>
+      <PropertyRef Name="fld_PersonID" />
+    </Key>
+    <Property Name="fld_PersonID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_PersonFName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fld_PersonLName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="fld_PersonNO" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="fld_FK_DepartmentID" Type="Int32" />
+    <NavigationProperty Name="Tbl_Department" Relationship="db_FSRMModel.FK_Tbl_Personnel_Tbl_Department" FromRole="Tbl_Personnel" ToRole="Tbl_Department" />
+    <NavigationProperty Name="Tbl_Access" Relationship="db_FSRMModel.FK_Tbl_Access_Tbl_Personnel" FromRole="Tbl_Personnel" ToRole="Tbl_Access" />
+  </EntityType>
+  <Association Name="FK_Tbl_Personnel_Tbl_Department">
+    <End Type="db_FSRMModel.Tbl_Department" Role="Tbl_Department" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_Personnel" Role="Tbl_Personnel" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Department">
+        <PropertyRef Name="fld_DepartmentID" />
+      </Principal>
+      <Dependent Role="Tbl_Personnel">
+        <PropertyRef Name="fld_FK_DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Tbl_AccessLog">
+    <Key>
+      <PropertyRef Name="fld_AccessLogID" />
+    </Key>
+    <Property Name="fld_AccessLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_FK_AccessID" Type="Int32" />
+    <Property Name="fld_FK_AccessStatus" Type="Int32" />
+    <Property Name="fld_AccessLogPersonName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="fld_AccessLogPreviousAccessID" Type="Int32" />
+    <Property Name="fld_ShowLastLog" Type="Boolean" />
+    <Property Name="fld_AccessLogHDate" Type="Int32" />
+    <Property Name="fld_AccessLogTime" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+    <Property Name="fld_AccessLogMDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Tbl_AccessStatus" Relationship="db_FSRMModel.FK_Tbl_AccessLog_Tbl_AccessStatus" FromRole="Tbl_AccessLog" ToRole="Tbl_AccessStatus" />
+    <NavigationProperty Name="Tbl_Access" Relationship="db_FSRMModel.FK_Tbl_AccessLog_Tbl_Access" FromRole="Tbl_AccessLog" ToRole="Tbl_Access" />
+  </EntityType>
+  <Association Name="FK_Tbl_AccessLog_Tbl_AccessStatus">
+    <End Type="db_FSRMModel.Tbl_AccessStatus" Role="Tbl_AccessStatus" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_AccessLog" Role="Tbl_AccessLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_AccessStatus">
+        <PropertyRef Name="fld_AccessStatusID" />
+      </Principal>
+      <Dependent Role="Tbl_AccessLog">
+        <PropertyRef Name="fld_FK_AccessStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Tbl_Access">
+    <Key>
+      <PropertyRef Name="fld_AccessID" />
+    </Key>
+    <Property Name="fld_AccessID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_FK_PersonID" Type="Int32" />
+    <Property Name="fld_FK_FolderID" Type="Int32" />
+    <Property Name="fld_AccessRead" Type="Boolean" />
+    <Property Name="fld_AccessWrite" Type="Boolean" />
+    <Property Name="fld_AccessModify" Type="Boolean" />
+    <Property Name="fld_LastPersonModified" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="fld_AdminChecked" Type="Boolean" />
+    <Property Name="fld_AccessShow" Type="Boolean" />
+    <NavigationProperty Name="Tbl_Folders" Relationship="db_FSRMModel.FK_Tbl_Access_Tbl_Folders" FromRole="Tbl_Access" ToRole="Tbl_Folders" />
+    <NavigationProperty Name="Tbl_Personnel" Relationship="db_FSRMModel.FK_Tbl_Access_Tbl_Personnel" FromRole="Tbl_Access" ToRole="Tbl_Personnel" />
+    <NavigationProperty Name="Tbl_AccessLog" Relationship="db_FSRMModel.FK_Tbl_AccessLog_Tbl_Access" FromRole="Tbl_Access" ToRole="Tbl_AccessLog" />
+  </EntityType>
+  <Association Name="FK_Tbl_Access_Tbl_Folders">
+    <End Type="db_FSRMModel.Tbl_Folders" Role="Tbl_Folders" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_Access" Role="Tbl_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Folders">
+        <PropertyRef Name="fld_FolderID" />
+      </Principal>
+      <Dependent Role="Tbl_Access">
+        <PropertyRef Name="fld_FK_FolderID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_Access_Tbl_Personnel">
+    <End Type="db_FSRMModel.Tbl_Personnel" Role="Tbl_Personnel" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_Access" Role="Tbl_Access" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Personnel">
+        <PropertyRef Name="fld_PersonID" />
+      </Principal>
+      <Dependent Role="Tbl_Access">
+        <PropertyRef Name="fld_FK_PersonID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_AccessLog_Tbl_Access">
+    <End Type="db_FSRMModel.Tbl_Access" Role="Tbl_Access" Multiplicity="0..1" />
+    <End Type="db_FSRMModel.Tbl_AccessLog" Role="Tbl_AccessLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_Access">
+        <PropertyRef Name="fld_AccessID" />
+      </Principal>
+      <Dependent Role="Tbl_AccessLog">
+        <PropertyRef Name="fld_FK_AccessID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Tbl_Admins">
+    <Key>
+      <PropertyRef Name="fld_AdminID" />
+    </Key>
+    <Property Name="fld_AdminID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="fld_AdminName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="fld_AdminADName" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="fld_AdminShow" Type="Boolean" />
+    <Property Name="fld_AdminStatus" Type="Int32" />
+    <Property Name="fld_AdminMDateA" Type="DateTime" Precision="3" />
+    <Property Name="fld_AdminMDateR" Type="DateTime" Precision="3" />
+  </EntityType>
+</Schema>

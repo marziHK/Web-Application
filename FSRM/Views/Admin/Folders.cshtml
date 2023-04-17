@@ -1,0 +1,706 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+@{
+    ViewBag.Title = "مدیریت درخواست های ایجاد/حذف پوشه ها";
+    Layout = "~/Views/Shared/_LyAdmin.cshtml";
+}
+
+@*<link href="~/Content/kendo/kendo.default-nordic.min.css" rel="stylesheet" />*@
+<link href="~/Content/kendo/kendo.default-turquoise.min.css" rel="stylesheet" />
+<link href="~/Content/Datepicker/jalali.css" rel="stylesheet" />
+<script>
+    jalaliDatepicker.startWatch({
+        minDate: "attr",//میتوان استفاده نکرد
+        maxDate: "attr" //میتوان استفاده نکرد
+    });
+</script>
+
+<style>
+    .k-form-clear {
+        display: none !important;
+    }
+
+    #SearchForm2 .k-form-submit {
+        display: none !important;
+    }
+
+    #SearchForm2 .k-form-buttons {
+        float: left !important;
+    }
+
+    .k-form-fieldset {
+        margin: 0px 0 0 !important;
+    }
+
+    .k-form-legend {
+        border-width: 0 0 0px !important;
+    }
+</style>
+
+<script>
+
+    var showLoader = function () {
+        $("<div id='Loader1'/>").css({
+            'position': 'fixed',
+            'left': 0,
+            'right': 0,
+            'bottom': 0,
+            'top': 0,
+            'background': '#f6f6f663',
+            'z-index': '99',
+            'text-align': 'center'
+        }).appendTo($("body"))
+            .append(
+                $("<img />").attr("src", "../Content/photo/loader.gif").css({ 'top': '0', 'bottom': '0', 'left': '0', 'right': '0', 'margin': 'auto', 'position': 'absolute' })
+            )
+            ;
+    }
+
+    var EndLoader = function () {
+        $('#Loader1').css('display', 'none');
+        $('#AllPermits-grid button ').attr('disabled', false)
+    }
+
+</script>
+<br />
+<br />
+
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 fade">
+
+            </div>
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info-gradient"><i class="fa fa-inbox"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">تعداد کل درخواست ها</span>
+                        <span class="info-box-number">@ViewBag.CntAllFolderReq</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+            <div class="col-md-3 col-sm-6 col-12">
+                <div class="info-box">
+                    <span class="info-box-icon bg-danger-gradient"><i class="fa fa-unlock"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">تعداد درخواست های باز</span>
+                        <span class="info-box-number">@ViewBag.CntOpenFolderReq</span>
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+
+        </div>
+        <!-- /.row -->
+        <!-- =========================================================== -->
+        <br />
+
+
+        <br />
+
+        <!-- Filter Data -->
+        <div class="card card-info collapsed-card">
+            <div class="card-header">
+                <h3 class="card-title">جست و جو </h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+
+            <div class="card-body">
+                <div @*class="row"*@>
+
+
+
+                    @(Html.Kendo().Form<FSRM.Models.ViewModels.FolderSearchViewModel>()
+                        .Name("SearchForm2")
+                        .Orientation("vertical")
+                        .Layout("grid")
+                        .Grid(g => g.Cols(4).Gutter(30))
+                        .Items(items =>
+                        {
+                            items.AddGroup()
+                               .Layout("grid")
+                               .Label("وضعیت درخواست")
+                               .Grid(g => g.Cols(1).Gutter(5))
+                               .Items(i =>
+                               {
+                                   i.Add()
+                                       .Field(f => f.RequestType)
+                                       .Label("  ")
+                                       .Id("RequestType")
+                                       .Editor(e =>
+                                       {
+                                           e.CheckBoxGroup()
+                                           .Name("RequestType")
+
+                                           .LabelPosition(CheckBoxGroupLabelPosition.After)
+                                           .Layout(CheckBoxGroupLayout.Horizontal)
+                                           .Items(item =>
+                                           {
+                                               item.Add().Label("باز").Value("1");
+                                               item.Add().Label("تایید شده").Value("2");
+                                               item.Add().Label("تایید نشده").Value("3");
+                                               item.Add().Label("حذف شده").Value("4");
+                                               item.Add().Label("Modify").Value("3").HtmlAttributes(new { @class = "fade" });
+                                           });
+                                       });
+                               });
+
+                            items.AddGroup()
+                                .Layout("grid")
+                                .Label("تاریخ درخواست")
+                                .Grid(g => g.Cols(2).Gutter(10))
+                                .Items(i =>
+                                {
+                                    i.Add()
+                                         .Field(f => f.ReqSData)
+                                         .Label(l => l.Text(" از تاریخ : "))
+                                         .Id("ReqSData")
+                                         .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1401/01/01" });
+
+
+                                    i.Add()
+                                        .Field(f => f.ReqEData)
+                                        .Label(l => l.Text("تا تاریخ : "))
+                                        .Id("ReqEData")
+                                        .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1401/01/01" });
+                                });
+
+
+                            items.AddGroup()
+                                .Layout("grid")
+                                .Label("تاریخ بررسی مدیر")
+                                .Grid(g => g.Cols(2).Gutter(10))
+                                .Items(i =>
+                                {
+                                    i.Add()
+                                         .Field(f => f.AppSData)
+                                         .Label(l => l.Text(" از تاریخ : "))
+                                         .Id("AppSData")
+                                         .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1401/01/01" });
+
+                                    i.Add()
+                                        .Field(f => f.AppEData)
+                                        .Label(l => l.Text("تا تاریخ : "))
+                                        .Id("AppEData")
+                                        .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1401/01/01" });
+                                });
+
+                            items.AddGroup()
+                               .Label("نام معاونت")
+                               .Layout("grid")
+                               .Grid(g => g.Cols(1).Gutter(0))
+                               .Items(i =>
+                               {
+                                   i.Add()
+                                       .Field(f => f.OUID)
+                                       .Label("   ")
+                                       .Id("OUID")
+                                       .Editor(e =>
+                                       {
+                                           e.ComboBox()
+                                           .Placeholder("انتخاب کنید ...")
+                                           .Name("OUsDDL")
+                                           .DataTextField("OUFaName")
+                                           .DataValueField("OUID")
+                                           .DataSource(src =>
+                                           {
+                                               src.Read(rd => { rd.Action("Items_GetOUs", "Admin"); });
+                                           })
+                                           .Events(e2 => e2.Change("OuChange2"))
+                                           ;
+                                       });
+                               }).ColSpan(1);
+
+                            items.AddGroup()
+                               .Label("نام درخواست کننده (مالک) ")
+                               .Items(i =>
+                               {
+                                   i.Add()
+                                   .Field(f => f.FolderOwner)
+                                   .Name("FolderOwner")
+                                   .Id("FolderOwner")
+                                   .Label("   ");
+                               });
+
+                            items.AddGroup()
+                                .Label("حجم تصویب شده")
+                                .Items(i =>
+                                {
+                                    i.Add()
+                                    .Field(f => f.ApprovedFolderValue)
+                                    .Name("ApprovedFolderValue")
+                                    .Id("ApprovedFolderValue")
+                                    .Label("   ")
+                                    .Editor(e => e.NumericTextBox());
+                                });
+
+                            items.AddGroup()
+                               .Label("مسیر پوشه ")
+                               .Items(i =>
+                               {
+                                   i.Add()
+                                   .Field(f => f.FolderAddress)
+                                   .Name("FolderAddress")
+                                   .Id("FolderAddress")
+                                   .Label("   ");
+                               });
+
+
+
+                            items.AddGroup()
+                              .Label("نام مدیر سیستم")
+                              .Layout("grid")
+                              .Grid(g => g.Cols(1).Gutter(0))
+                              .Items(i =>
+                              {
+                                  i.Add()
+                                      .Field(f => f.AdminID)
+                                      .Label("   ")
+                                      .Id("AdminID")
+                                      .Editor(e =>
+                                      {
+                                          e.ComboBox()
+                                          .Placeholder("انتخاب کنید ...")
+                                          .Name("AdminDDL")
+                                          .DataTextField("AdminName")
+                                          .DataValueField("AdminID")
+                                          .DataSource(src =>
+                                          {
+                                              src.Read(rd => { rd.Action("Items_GetAdmins", "Admin"); });
+                                          })
+                                          .Events(e2 => e2.Change("AdChange2"));
+                                      });
+                              }).ColSpan(1);
+
+                        })
+                )
+
+                </div>
+                <!-- /.row -->
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card Filter Data -->
+        <!-- =========================================================== -->
+        <!-- Grid Data -->
+        <div class="card card-info ">
+            @*card-outline*@
+            <div class="card-header">
+                <h3 class="card-title">
+                    درخواست های کاربران
+                </h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+                <!-- /. tools -->
+                <!-- /.card-header -->
+
+            </div>
+            <div class="card-body k-rtl" style="font-size: 15px; font-weight: 200;">
+                @(Html.Kendo().Grid<FSRM.Models.ViewModels.AdminUserFolderViewModel>()
+                        .Name("AllFolders-grid")
+                        .Columns(columns => {
+                            columns.Bound(c => c.FolderID).Title("ID").Hidden();
+                            columns.Bound(c => c.OwnerName).Title("درخواست کننده").HtmlAttributes(new { style = "direction: ltr;" });//.Width(170); ;
+                            columns.Bound(c => c.SugFolderName).Title("نام پیشنهادی ").HtmlAttributes(new {AutoCompleteType = "Disabled", id = "SugFolderName" }).Width(100);
+                            columns.Bound(c => c.SugFolderAddress).Title("آدرس پیشنهادی").HtmlAttributes(new { style = "direction: ltr;", id = "select", autocomplete = "off", @class = "path" });//.Width(300);
+                            columns.Bound(c => c.SugFolderValue).Title("حجم پیشنهادی (GB)").EditorTemplateName("Integer");//.Width(100);
+                            columns.Bound(c => c.FolderAddress).Title("آدرس نهایی").HtmlAttributes(new { style = "direction: ltr;", @class = "path" }); ;
+                            columns.Bound(c => c.ApprovedFolderValue).Title("حجم تصویب شده (GB)").Width(150);
+                            columns.Bound(c => c.ReqHDate).Title("تاریخ ثبت درخواست").HtmlAttributes(new { @class = "PermDate" }).Width(120);
+                            columns.Bound(c => c.RequestStatus).Title("وضعیت درخواست").HtmlAttributes(new { @class = "PermStatus" });
+                            columns.Bound(c => c.StatusCode).Hidden();
+                            //columns.Command(command => {
+                            //command.Custom("رهگیری درخواست").HtmlAttributes(new { id="test"}).Click("ShowLog");
+                            //command.Edit().Text("ویرایش").Visible("setVisible");
+                            //command.Destroy().Text("حذف").Visible("setVisibleR"); } ).Title("ملاحظات");//.Width(200); //}
+                            columns.Command(command => {
+                                command.Custom("تایید").Click("ApplyChanges").Visible("setVisibleCheckA").HtmlAttributes(new { @class = "CustomBTN" });
+                                command.Custom("عدم تایید").Click("RefuseRequest").Visible("setVisibleCheck").HtmlAttributes(new { @class = "CustomBTN" });
+                                command.Edit().Text("ویرایش").Visible("CheckChangesVisibleE").HtmlAttributes(new { @class = "CustomBTN" }).CancelText("انصراف").UpdateText("ذخیره");
+                                command.Destroy().Text("حذف").Visible("CheckChangesVisibleR").HtmlAttributes(new { @class = "CustomBTN" });
+                                command.Custom("رهگیری درخواست").Click("ShowLog").HtmlAttributes(new { @class = "CustomBTN" });
+                            }).Title(" ");//.Width(120);
+
+                        })
+                        .ToolBar(t => { t.Excel().Text("دانلود فایل اکسل"); })
+                        .HtmlAttributes(new { style = "height:1000px; margin:auto; " })//width: 1500px; height: 500px;
+                        .PersistSelection()
+                        .Editable(editable => editable.Mode(GridEditMode.InLine).DisplayDeleteConfirmation(false).ConfirmDelete("آیا از حذف این گزینه مطمئن هستید؟").DisplayDeleteConfirmation("آیا از حذف این گزینه مطمئن هستید؟"))
+                        //.Events(events => events.Edit("onEdit"))
+                        .Events(ev => { ev.DataBound("onDataBound"); ev.Cancel("onCancel"); })
+                        .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Read(read => read.Action("ReadUserFolders_ByAdmin", "Folder").Data("getParameter"))
+                            .Update(update => update.Action("UpdateUserFolders_ByAdmin", "Folder"))
+                            .Destroy(delete => delete.Action("RemoveUserFolders_ByAdmin", "Folder"))
+                            .PageSize(15)
+                            .Model(m => { m.Id(p => p.FolderID);})
+                            .ServerOperation(true)
+                            .Events(events =>{
+                                events.RequestEnd("onRequestEnd"); //I've added this
+                            })
+                             )
+                        .Scrollable()
+                        .Sortable()
+                        .Pageable()
+                        .Resizable(r => r.Columns(true))
+                        .Excel(excel => excel
+                                .AllPages(true)
+                                .FileName("FsrmFoldersList.xlsx")
+                                .Filterable(true)
+                                .ProxyURL(Url.Action("Excel_Export_Save", "Folder"))
+                            )
+                        )
+                <!-- The Modal Show Log-->
+                <div id="SelectedLog">
+                    @(Html.Kendo().Window().Name("Details")
+                        .HtmlAttributes(new { id = "Details"})
+                        .Title("رهگیری درخواست ایجاد پوشه")
+                        .Visible(false)
+                        .Modal(true)
+                        .Draggable(true)
+                        .Width(600)
+                        .Height(600)
+                       )
+                </div>
+
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.card Grid Data -->
+
+
+    </div>
+</section>
+
+
+
+<script type="text/javascript">
+    function setVisibleCheckA(dataItem) {
+        let ret = dataItem.AdminChecked ? false : true
+        if (dataItem.AccDel == false) {
+            ret = false;
+        }
+        if (dataItem.StatusCode == 3) {
+            ret = true;
+        }
+        return ret;
+    }
+
+    function setVisibleCheck(dataItem) {
+        let ret = dataItem.AdminChecked ? false : true
+        if (dataItem.AccDel == false) {
+            ret = false;
+        }
+        return ret;
+    }
+
+    function CheckChangesVisibleE(dataItem) {
+        return dataItem.AccDel;
+    }
+    function CheckChangesVisibleR(dataItem) {
+        let re = dataItem.AccDel;
+        if (dataItem.StatusCode == 5) {
+            re = true;
+        }
+        return re;
+    }
+
+
+    function ApplyChanges(e) {
+        $('#AllFolders-grid button ').attr('disabled', true)
+        e.preventDefault();
+        showLoader();
+        var row = $(e.target).closest("tr");
+        var grid = $("#AllFolders-grid").data("kendoGrid");
+        var dataItem = grid.dataItem(row);
+        //debugger;
+        $.ajax({
+            url: "@Url.Action("AdminCheckedFolder", "Folder")",
+            data: {
+                FolderID: dataItem.FolderID,
+                StatusCode: dataItem.StatusCode
+            },
+            dataType: "text",
+            type: "POST",
+            error: function () {
+                EndLoader();
+                alert("Unexpected Error Occurred");
+            },
+            success: function (data) {
+                EndLoader();
+                $("#AllFolders-grid").data("kendoGrid").dataSource.read();
+            }
+        });
+
+       // e.preventDefaults();
+    }
+
+    function RefuseRequest(e) {
+        $('#AllFolders-grid button ').attr('disabled', true)
+        e.preventDefault();
+        showLoader();
+        var row = $(e.target).closest("tr");
+        var grid = $("#AllFolders-grid").data("kendoGrid");
+        var dataItem = grid.dataItem(row);
+        //debugger;
+        $.ajax({
+            url: "@Url.Action("AdminRefuseFolder", "Folder")",
+            data: {
+                FolderID: dataItem.FolderID,
+                StatusCode: dataItem.StatusCode
+            },
+            dataType: "text",
+            type: "POST",
+            error: function () {
+                EndLoader();
+                alert("Unexpected Error Occurred");
+            },
+            success: function (data) {
+                EndLoader();
+                $("#AllFolders-grid").data("kendoGrid").dataSource.read();
+            }
+        });
+
+       // e.preventDefaults();
+    }
+
+</script>
+
+
+
+<!-- Show Folder Log -->
+<script type="text/javascript">
+    var DetailsLog;
+    function ShowLog(e) {
+
+        e.preventDefault();
+
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        $("#Details").html('');
+        $.ajax({
+            url: "@Url.Action("Load_FolderLog", "Folder")",
+            data: {
+                FolderID: dataItem.FolderID
+            },
+            dataType: "text",
+            type: "POST",
+            error: function () {
+                alert("Unexpected Error Occurred");
+            },
+            success: function (data) {
+                DetailsLog = JSON.parse(data);
+                var ht = "<table class='table table-bordered table-striped'><thead><tr><th scope='col' style='text-align: center;'>وضعیت</th><th scope='col' style='text-align: center;'>تغییرات</th><th scope='col' style='text-align: center;'>تاریخ</th><th scope='col' style='text-align: center;'>نام فرد</th></tr></thead>";
+                for (let x in DetailsLog.Data) {
+
+                    ht += `<tr>
+                                <td>` + DetailsLog.Data[x].FolderStatusDesc +`</td>
+                                <td>` + DetailsLog.Data[x].Changes +`</td>
+                                <td> ` + DetailsLog.Data[x].LogHDate + `</td>
+                                <td> ` + DetailsLog.Data[x].PersonName + `</td>
+                            </tr>`;
+
+                }
+                ht += "</table>";
+                $("#Details").html(ht);
+            }
+
+
+        });
+
+
+        var wnd = $("#Details").data("kendoWindow");
+
+        wnd.center().open();
+    }
+</script>
+
+<!-- For Grid Data -->
+<script>
+
+
+    function onDataBound(e) {
+        var rows = e.sender.tbody.children();
+        //debugger;
+        for (var j = 0; j < rows.length; j++) {
+            var row = $(rows[j]);
+            var dataItem = e.sender.dataItem(row);
+
+            if (dataItem.get("AdminChecked") == false) {
+                if (j % 2 == 0) {
+                    row.addClass("GridRowBackDel");
+                }
+                else {
+                    row.addClass("GridRowBackDel2");
+                }
+            }
+            //if (dataItem.AccDel == false) {
+            //    row.addClass("GridRowBackEd");
+            //}
+        }
+    }
+
+    function onCancel(e) {
+
+        $("#AllFolders-grid").data("kendoGrid").refresh();
+
+    }
+
+
+    function onRequestEnd(e) {
+
+        if (e.type == "create" || e.type == "update") {
+            var grid = $("#AllFolders-grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+
+    $("#SearchForm2").kendoForm({
+        buttonsTemplate: '<input class="k-button k-primary" type="button" id="btnSearch" onclick="BindGrid();" value="جست و جو" /> <input class="k-button" type="button" id="btnCLear" onclick="ClearForm();" value="پاک کردن فیلترها" />'
+    });
+</script>
+
+
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#SearchForm2").on('keypress', '#FolderOwner', function (event) {
+            var ew = event.which;
+
+            //if (48 <= ew && ew <= 57)
+            //    return true;
+            if (65 <= ew && ew <= 90)
+                return true;
+            if (97 <= ew && ew <= 122)
+                return true;
+            return false;
+        });
+    });
+
+    $('#SearchForm2').on('click', '#ReqSData', function () {
+        $('input[name *= "ReqSData"]').attr("readonly", true);
+
+    })
+    $('#SearchForm2').on('click', '#ReqEData', function () {
+        $('input[name *= "ReqEData"]').attr("readonly", true);
+
+    })
+    $('#SearchForm2').on('click', '#AppSData', function () {
+        $('input[name *= "AppSData"]').attr("readonly", true);
+
+    })
+    $('#SearchForm2').on('click', '#AppEData', function () {
+        $('input[name *= "AppEData"]').attr("readonly", true);
+
+    })
+
+    var DLou1 = null;
+    var DlAdmin2 = null;
+    function OuChange2(e) {
+        DLou1 = e.sender.value();
+    }
+
+    function AdChange2(e) {
+        DlAdmin2 = e.sender.text();
+    }
+    function ClearForm(e) {
+        var form = $("#SearchForm2").data("kendoForm");
+        //form.clear();
+        document.getElementById('ReqSData').value = "";
+        document.getElementById('ReqEData').value = "";
+        document.getElementById('AppSData').value = "";
+        document.getElementById('AppEData').value = "";
+        document.getElementById('FolderOwner').value = "";
+        document.getElementById('FolderAddress').value = "";
+        x = $("#ApprovedFolderValue").data("kendoNumericTextBox");
+        x.value(null);
+
+        ck = $("#RequestType").data("kendoCheckBoxGroup")
+        ck.checkAll(false)
+
+        $("#OUID").data("kendoComboBox").value("");
+        DLou1 = null;
+        //form.refresh()
+
+        $("#AdminID").data("kendoComboBox").value("");
+        DlAdmin2 = null;
+
+        $("#AllFolders-grid").data("kendoGrid").dataSource.read({
+            Typ: 'Clear'
+        });
+        $("#AllFolders-grid").data("kendoGrid").refresh();
+    }
+    function getParameter() {
+        //debugger;
+        ch_list = Array();
+        $("#RequestType input:checkbox[type=checkbox]:checked").each(function () { ch_list.push($(this).val()); });
+        return {
+            ReqSData: $("#ReqSData").val(),
+            ReqEData: $("#ReqEData").val(),
+            AppSData: $("#AppSData").val(),
+            AppEData: $("#AppEData").val(),
+            Owner: $("#FolderOwner").val(),
+            FolderAddress: $("#FolderAddress").val(),
+            FolderVal: $("#ApprovedFolderValue").val(),
+            ch_Request: ch_list,
+            OU_ID: DLou1,
+            AdminName: DlAdmin2,
+        }
+    }
+
+    function BindGrid(e) {
+        $("#AllFolders-grid").data("kendoGrid").dataSource.read()
+        $("#AllFolders-grid").data("kendoGrid").refresh();
+    }
+
+
+
+    $('#AllFolders-grid').on('click', '.path', function myfunction() {
+
+        debugger;
+        var text = $(this).html();
+        var elem = document.createElement("textarea");
+        document.body.appendChild(elem);
+        elem.value = 'OpenPathEasy:' + text;
+        elem.select();
+        document.execCommand("copy");
+        document.body.removeChild(elem);
+
+        //<a target="_self" href="localexplorer:C:\Program Files">C:\Program Files</a>
+        //window.open('localexplorer:' + text);
+
+
+
+    })
+</script>

@@ -1,0 +1,13 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+@model FSRM.Models.ViewModels.OUsViewModel
+
+@*@(Html.Kendo().DropDownListFor(m => m)*@
+@(Html.Kendo().DropDownList().Name("UserOU")
+        .DataValueField("OUID")
+        .DataTextField("OUFaName")
+        .DataSource(d=>d.Read(r=> r.Action("Index", "OUs"))
+        )
+        //.BindTo((System.Collections.IEnumerable)ViewData["Units"])
+     //   .Events(ev => { ev.DataBound("evDataBound"); ev.Change("evDataBound"); })
+)

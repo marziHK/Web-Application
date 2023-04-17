@@ -1,0 +1,157 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+@using Kendo.Mvc.UI
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title> دسترسی های FSRM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="~/Content/kendo/kendo.rtl.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/kendo.common.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/kendo.common-bootstrap.min.css" rel="stylesheet" />
+
+    <link href="~/Content/kendo/kendo.blueopal.min.css" rel="stylesheet" />
+    @*<link href="~/Content/kendo/kendo.fiori.min.css" rel="stylesheet" />*@
+
+
+    @*<link href="~/Content/Datepicker/jalali.css" rel="stylesheet" />
+        <script src="~/Content/Datepicker/Jalali.js"></script>*@
+    @*<link href="~/Content/bootstrap.min.css" rel="stylesheet" />*@
+    <script src="~/Scripts/kendo/jszip.min.js"></script>
+    <script src="~/Scripts/kendo/jquery.min.js"></script>
+    <script src="~/Scripts/kendo/kendo.all.min.js"></script>
+    @*<script src="~/Scripts/kendo/kendo.web.min.js"></script>*@
+    <script src="~/Scripts/kendo/kendo.aspnetmvc.min.js"></script>
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/Content/bootstrap.rtl.css" />
+    @*<link rel="stylesheet" href="~/Content/CuCss.css">*@
+    <link href="~/Content/UserStyle.css" rel="stylesheet" />
+
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.validate-vsdoc.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    @*<script src="~/Scripts/jquery.maskedinput.min.js"></script>*@
+    <script>
+        function isIE() { return navigator.userAgent.indexOf('MSIE') > -1 || navigator.userAgent.indexOf('Trident') > -1 };
+        if (isIE()) alert("لطفا از مرورگر های جدید کروم و یا فایر فاکس استفاده کنید");
+
+
+        
+    </script>
+
+    <style>
+        .k-form-clear {
+            display: none !important;
+        }
+
+        #SearchForm .k-form-submit {
+            display: none !important;
+        }
+
+        #SearchForm .k-form-buttons {
+            float: left !important;
+        }
+
+        .k-form-fieldset {
+            margin: 0px 0 0 !important;
+        }
+
+        .k-form-legend {
+            border-width: 0 0 0px !important;
+        }
+        /* #SubBtn{
+                display : inline-block !important;
+            }*/
+
+    </style>
+
+
+    <!-- Custom stylesheet -->
+    <link href="~/Content/Site_animate.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+
+</head>
+
+<body>
+    <header>
+        @*<div id="preloader" style="width:100px; position:fixed; left:50%; margin-left:-50px; top:200px;
+                                    display:block; text-align:center; font-family:Tahoma; font-size:9pt; direction:rtl;">
+            <div style="position:fixed; top:0px; left:0px; width:100%; height:100%; background-color:black; opacity:0.7;z-index:1000;">
+            </div>
+            <div style="position:fixed; z-index:1001">
+                <img src="~/Content/photo/Ghost.gif" /><br />
+                لطفاً منتظر بمانید...
+            </div>
+        </div>*@
+
+
+
+
+        <div class="container k-rtl">
+            <div class="col-md-4 col-sm-6 col-xs-6">
+                
+            </div>
+
+            <div class="col-md-8 col-sm-6 col-xs-6 Users">
+                <span class="UserInfo grayText">
+                    کاربر  &nbsp
+                    <b class="blueText">
+                        @Session["User_Name"]
+                    </b>
+                    <b class="grayText">&nbspخوش آمدید. </b>
+                </span>
+            </div>
+
+        </div>
+    </header>
+    <div class="jumbotron">
+        @*<img class="img-responsive" src="../Content/photo/Backimg.jpg" />*@
+    </div>
+
+    <div class="container-fluid" id="main-wrapper">
+
+        <div class="col-md-12">
+            <div class="form-container k-rtl">
+                @*<h4>همین حالا با تکمیل فرم زیر، فایل مورد نظر را دریافت کنید!</h4>*@
+                <br />
+                <br />
+                <h3 class="blueText">
+                    همکار گرامی لطفا اطلاعات را با دقت وارد نمایید.
+                </h3>
+                <br />
+                <br />
+                <br />
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="container k-rtl">کلیه حقوق این وب سایت متعلق به شرکت مهندسی و ساخت ژنراتور مپنا (پارس) میباشد.</div>
+    </footer>
+    @*<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>*@
+
+
+
+    @*<script type="text/javascript">
+        setTimeout(hide, 3000);
+
+        function hide() {
+            document.getElementById('preloader').style.display = "none";
+        }
+    </script>*@
+
+
+</body>
+
+</html>

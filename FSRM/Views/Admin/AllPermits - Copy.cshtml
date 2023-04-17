@@ -1,0 +1,290 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+@{
+    ViewBag.Title = "AdminView";
+    Layout = "~/Views/Shared/_Ly.cshtml";
+}
+
+<script>
+    jalaliDatepicker.startWatch({
+        minDate: "attr",//میتوان استفاده نکرد
+        maxDate: "attr" //میتوان استفاده نکرد
+    });
+</script>
+
+
+<br />
+<br />
+<br />
+<br />
+
+
+<div class="container k-rtl ">
+    <fieldset class="fld">
+
+        @* <h4>جست و جو</h4>*@
+        <legend class="lgd" > جست و جو </legend>
+        @(Html.Kendo().Form<FSRM.Models.ViewModels.SearchViewModel>()
+            .Name("SearchForm")
+            .Orientation("vertical")
+            .Layout("grid")
+            .Grid(g => g.Cols(2).Gutter(20))
+
+            .Items(items =>
+            {
+                items.AddGroup()
+                    //.Label("جستجو بر اساس تاریخ درخواست ایجاد دسترسی")
+                    .Layout("grid")
+                    .Grid(g => g.Cols(2).Gutter(10))
+                    .Items(i =>
+                    {
+                        i.Add()
+                             .Field(f => f.ReqSData)
+                             .Label(l => l.Text("تاریخ درخواست از تاریخ : "))
+                             .Id("ReqSData")
+                             .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1400/11/01" });
+
+
+                        i.Add()
+                            .Field(f => f.ReqEData)
+                            .Label(l => l.Text("تا تاریخ : "))
+                            .Id("ReqEData")
+                            .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1400/11/01" });
+                    });
+
+
+                items.AddGroup()
+                    //.Label("جستجو بر اساس تاریخ اعمال دسترسی")
+                    .Layout("grid")
+                    .Grid(g => g.Cols(2).Gutter(10))
+                    .Items(i =>
+                    {
+                        i.Add()
+                             .Field(f => f.AppSData)
+                             .Label(l => l.Text("تاریخ اعمال از تاریخ : "))
+                             .Id("AppSData")
+                             .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1400/11/01" });
+
+                        i.Add()
+                            .Field(f => f.AppEData)
+                            .Label(l => l.Text("تا تاریخ : "))
+                            .Id("AppEData")
+                            .InputHtmlAttributes(new { data_jdp = "", data_jdp_min_date = "1400/11/01" });
+                    });
+
+                items.AddGroup()
+                   //.Label("جستجو بر اساس نوع دسترسی")
+                   .Layout("grid")
+                   .Grid(g => g.Cols(1).Gutter(10))
+                   .Items(i =>
+                   {
+                       i.Add()
+                           .Field(f=>f.AccessType)
+                           .Label("نوع دسترسی :")
+                           .Id("AccessType")
+                           .Editor(e =>
+                           {
+                               e.CheckBoxGroup()
+                               .Name("AccessType")
+
+                               .LabelPosition(CheckBoxGroupLabelPosition.After)
+                               .Layout(CheckBoxGroupLayout.Horizontal)
+                               .Events(e3 => e3.Change("changeFunc"))
+                               .Items(item =>
+                               {
+                                   item.Add().Label("Read").Value("1");
+                                   item.Add().Label("Write").Value("2");
+                                   item.Add().Label("Modify").Value("3");
+                               });
+                           });
+                   });
+
+
+                items.AddGroup()
+                    //.Label("جستجو بر اساس نام معاونت")
+                    .Layout("grid")
+                    .Grid(g => g.Cols(2).Gutter(10))
+                    .Items(i =>
+                    {
+                        i.Add()
+                            .Field(f=>f.OUID)
+                            .Label("نام معاونت : ")
+                            .Id("OUID")
+                            .Editor(e =>
+                            {
+                                e.ComboBox()
+                                .Placeholder("انتخاب کنید ...")
+                                .Name("OUsDDL")
+                                .DataTextField("OUFaName")
+                                .DataValueField("OUID")
+                                .DataSource(src =>
+                                {
+                                    src.Read(rd => { rd.Action("Items_GetOUs", "Admin"); });
+                                })
+                                .Events(e2=>e2.Change("OuChange"));
+                            });
+                    });
+
+                items.AddGroup()
+                    //.Label("جستجو بر اساس نام مالک پوشه ")
+                    .Items(i =>
+                    {
+                        i.Add()
+                        .Field(f => f.FolderOwner)
+                        .Name("OwnerName")
+                        .Id("OwnerName")
+                        .Label(" نام مالک پوشه : ");
+                    });
+
+            })
+        )
+    </fieldset>
+</div>
+
+
+
+
+
+<br />
+<br />
+<br />
+<br />
+<div class="k-rtl">
+    @(Html.Kendo().Grid<FSRM.Models.ViewModels.AllAccessViewModel>()
+                            .Name("AllPermits-grid")
+                            .Columns(columns =>
+                            {
+                            columns.Bound(c => c.AccessID).Hidden();
+                            columns.Bound(c => c.PersonFName).Title("نام ");
+                            columns.Bound(c => c.PersonLName).Title("نام خانودگی");
+                            columns.Bound(c => c.PersonNO).Title("شماره پرسنلی");
+                            columns.Bound(c => c.UserOU).Title("معاونت");
+                            columns.Bound(c => c.PersonID).Hidden();
+                            columns.Bound(c => c.PersonAdded).Title("مالک پوشه");
+                            columns.Bound(c => c.FolderAddress).Title("مسیر پوشه");
+                            columns.Bound(c => c.FolderID).Hidden();
+                            columns.Bound(c => c.AccessRead).Title("Read").Width(100);
+                            columns.Bound(c => c.AccessWrite).Title("Write").Width(100);
+                            columns.Bound(c => c.AccessModify).Title("Modify").Width(120);
+                            columns.Bound(c => c.AdminChecked).Title("وضعیت");
+                            columns.Template(@<text> @Html.ActionLink("اعمال دسترسی", "AdminCheckedPermit", new { AccId = item.AccessID })</text>)
+                                                        .HeaderTemplate("ملاحظات")
+                                                        .HeaderHtmlAttributes(new { @class = "text-center options-column" })
+                                                        .HtmlAttributes(new { @class = "text-center" })
+                                                        .ClientTemplate("# if (AdminChecked=='ثبت توسط کاربر') { #" + @Html.ActionLink("اعمال دسترسی", "AdminCheckedPermit", new { AccId = "REPLACEME" }).ToHtmlString().Replace("REPLACEME", "#:AccessID#") + "# }else {#" + "" + "#} #");
+
+                            })
+                            .ToolBar(t => { t.Excel().Text("دانلود فایل اکسل");  })//t.Pdf().Text("دانلود فایل PDF");
+                            .HtmlAttributes(new { style = "height: 500px; margin:auto;" })
+                            .Excel(excel => excel
+                                .AllPages(true)
+                                .FileName("FsrmPermitsList.xlsx")
+                                .Filterable(true)
+                                .ProxyURL(Url.Action("Excel_Export_Save", "Admin"))
+                            )
+                            .Scrollable()
+                            .Filterable()
+                            .Sortable()
+                            .Pageable()
+                            .Reorderable(r => r.Columns(true))
+                            .Resizable(r => r.Columns(true))
+                            //.Editable(editable => editable.Mode(GridEditMode.InLine).DisplayDeleteConfirmation(false).ConfirmDelete("آیا از حذف این گزینه مطمئن هستید؟").DisplayDeleteConfirmation("آیا از حذف این گزینه مطمئن هستید؟"))
+                            .DataSource(dataSource => dataSource
+                                            .Ajax()
+                                            .PageSize(20)
+                                            .Model(model => { model.Id(p => p.AccessID); })
+                                            .Events(events =>
+                                            {
+                                                events.RequestEnd("onRequestEnd"); //I've added this
+                                            })
+                                            //.Read(read => read.Action("ReadAllAccess", "Admin").Data("getParameter"))
+                                            .Read(read => read.Action("ReadAllAccess", "Admin"))
+                                )
+                        )
+
+</div>
+
+
+
+<script type="text/javascript">
+
+    $("#SearchForm").kendoForm({
+        buttonsTemplate: '<input class="k-button k-primary" type="button" id="btnSearch" onclick="BindGrid();" value="جست و جو" /> <input class="k-button" type="button" id="btnCLear" onclick="ClearForm();" value="پاک کردن فیلترها" />'
+        //buttonsTemplate: '<input class="k-button k-primary" type="button" id="btnSearch" onclick="BindGrid();" value="جست و جو" /><button class="k-button k-form-clear">Clear1</button>'
+    });
+    var DLou = null;
+    function OuChange(e) {
+        DLou = e.sender.value();
+    }
+    var lst = null;
+
+    function changeFunc(e) {
+        lst = e;//e.sender.val();
+        //alert(this.select().find(".myCheckBox").is(":checked"));
+        //alert(e.sender.val());
+    }
+
+    function BindGrid(e) {
+        //e.preventDefault();
+        var ch_list = [];
+        $("input[type=checkbox]:checked").each(function () {
+            ch_list.push($(this).val());
+        });
+        alert(ch_list.join());
+        //$("input:checkbox[type=checkbox]:checked").each(function () { ch_list.push($(this).val()); });
+
+        $("#AllPermits-grid").data("kendoGrid").dataSource.read({
+            Typ: 'Search',
+            ReqSData: $("#ReqSData").val(),
+            ReqEData: $("#ReqEData").val(),
+            AppSData: $("#AppSData").val(),
+            AppEData: $("#AppEData").val(),
+            Owner: $("#OwnerName").val(),
+            ch_Access: ch_list,
+            OU_ID: DLou
+        });
+       // $("#AllPermits-grid").data("kendoGrid").dataSource.read()
+        $("#AllPermits-grid").data("kendoGrid").refresh();
+    }
+
+    function ClearForm(e) {
+        var form = $("#SearchForm").data("kendoForm");
+        form.clear();
+        DLou = null;
+        $("#AllPermits-grid").data("kendoGrid").dataSource.read({
+            Typ: 'Clear'
+        });
+        $("#AllPermits-grid").data("kendoGrid").refresh();
+    }
+
+
+</script>
+
+
+
+<script type="text/javascript">
+    //const { data } = require("jquery");
+
+
+    function onRequestEnd(e) {
+
+        if (e.type == "create" || e.type == "update") {
+            var grid = $("#AllPermits-grid").data("kendoGrid");
+            grid.dataSource.read();
+        }
+    }
+
+    function error_handler(e) {
+        if (e.errors) {
+            var message = "Errors:\n";
+            $.each(e.errors, function (key, value) {
+                if ('errors' in value) {
+                    $.each(value.errors, function () {
+                        message += this + "\n";
+                    });
+                }
+            });
+            alert(message);
+        }
+    }
+</script>

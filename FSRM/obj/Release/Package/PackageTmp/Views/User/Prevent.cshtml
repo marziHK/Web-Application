@@ -1,0 +1,34 @@
+﻿@*بسم الله الرحمن الرحیم*@
+
+@{
+    ViewBag.Title = "Prevent";
+    Layout = "~/Views/Shared/_LyHome.cshtml";
+}
+<br />
+<br />
+<div class="blueText" style="text-align: center">
+    <h2> شما مجوز دسترسی به این صفحه را ندارید </h2>
+    <br />
+    <br />
+    <br />
+
+    @*@(Html.Kendo().Button()
+        .Name("BtnPortal")
+        .HtmlAttributes( new {type = "button", @class = "k-primary", style="float:left" } )
+        .Content("بازگشت به پورتال")
+        .Events(e=>e.Click("Onclick"))
+        //.HtmlAttributes(new { style="direction:ltr !important;"})
+        )*@
+</div>
+
+
+<script>
+    function Onclick() {
+        window.location = "http://portal.pars.ir/SitePages/MainPage.aspx";
+        //window.open("http://portal.pars.ir/SitePages/MainPage.aspx");
+        //window.close();
+    }
+</script>
+
+
+
